@@ -1,0 +1,15 @@
+.hidden-conten-tabla {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.hidden-conten-tabla::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+
+}
+
+.hidden-conten-tabla::-webkit-scrollbar-thumb {
+    background-color: #58C6CD;
+    border-radius: 999px;
+}

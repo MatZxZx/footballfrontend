@@ -1,0 +1,18 @@
+.Continue {
+    color: white;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    width: 100%;
+}
+
+.continueButton {
+    position: absolute;
+}
+
+.steps {
+    font-size: x-large;
+}
+
+.welcome {
+    font-size: xx-large;
+}

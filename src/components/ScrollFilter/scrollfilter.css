@@ -1,0 +1,56 @@
+.search{
+    width: 90%;
+    text-align: center;
+    font-family: "Poppins";
+    background-color: #247855;
+    border: none;
+    padding: .1rem .5rem ;
+    font-size: 25px;
+    font-weight: 400;
+    border-radius: 1.2rem;
+    color: white;
+    box-shadow: inset 0px 5px 9px 3px rgba(0,0,0,0.44);
+}
+
+.del{
+    font-family: "Poppins";
+    font-size: 20px;
+    font-weight: bold;
+    color: #C71919
+}
+
+.mc{
+    font-family: "Poppins";
+    font-size: 20px;
+    font-weight: bold;
+    color: #E3E816
+
+}
+
+.df{
+    font-family: "Poppins";
+    font-size: 20px;
+    font-weight: bold;
+    color: #58C6CD
+}
+
+.pt{
+    font-family: "Poppins";
+    font-size: 20px;
+    font-weight: bold;
+    color: #CC40E2
+
+}
+
+.fil{
+    font-weight: bold;
+}
+
+.ord{
+    width: 4rem;
+    font-family: "Poppins";
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #58C6CD;
+    border-radius: 1.2rem;
+}
