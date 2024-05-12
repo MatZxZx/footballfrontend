@@ -1,56 +1,67 @@
-.search{
-    width: 90%;
+.search {
     text-align: center;
-    font-family: "Poppins";
     background-color: #247855;
     border: none;
-    padding: .1rem .5rem ;
+    padding: .1rem 0;
     font-size: 25px;
     font-weight: 400;
     border-radius: 1.2rem;
     color: white;
-    box-shadow: inset 0px 5px 9px 3px rgba(0,0,0,0.44);
+    box-shadow: inset 0px 5px 9px 3px rgba(0, 0, 0, 0.44);
 }
 
-.del{
-    font-family: "Poppins";
-    font-size: 20px;
+.del {
     font-weight: bold;
-    color: #C71919
+    color: #C71919;
 }
 
-.mc{
-    font-family: "Poppins";
-    font-size: 20px;
+.mc {
     font-weight: bold;
-    color: #E3E816
-
+    color: #E3E816;
 }
 
-.df{
-    font-family: "Poppins";
-    font-size: 20px;
+.df {
     font-weight: bold;
-    color: #58C6CD
+    color: #58C6CD;
 }
 
-.pt{
-    font-family: "Poppins";
-    font-size: 20px;
+.pt {
     font-weight: bold;
-    color: #CC40E2
-
+    color: #CC40E2;
 }
 
-.fil{
+.del:hover {
+    background-color: #C71919;
+    color: #fff;
+}
+
+.mc:hover {
+    background-color: #E3E816;
+    color: #fff;
+}
+
+.df:hover {
+    background-color: #58C6CD;
+    color: #fff;
+}
+
+.pt:hover {
+    background-color: #CC40E2;
+    color: #fff;
+}
+
+.fil {
     font-weight: bold;
+    padding: .2rem .5rem;
+    transition: background-color .3s;
+    border-radius: .67rem;
 }
 
-.ord{
-    width: 4rem;
-    font-family: "Poppins";
-    font-size: 20px;
+.fil:hover {
+    background-color: #101010;
+}
+
+.ord {
     font-weight: bold;
     background-color: #58C6CD;
-    border-radius: 1.2rem;
 }

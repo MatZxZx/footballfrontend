@@ -1,11 +1,20 @@
 import TeamComponent from '../../components/Team/Team'
-import dataTeam from '../../data/team'
 import LayoutPage from '../../layouts/LayoutPage'
-
+import { useSelector } from 'react-redux'
+import useNavbar from '../../hooks/useNavbar'
+import { useEffect } from 'react'
 function Team() {
+
+  const userState = useSelector(state => state.user.user)
+  const { setIcon } = useNavbar()
+
+  useEffect(() => {
+    setIcon('team')
+  }, [])
+  
   return (
     <LayoutPage>
-      <TeamComponent dataTeam={dataTeam} budget={1000} />
+      <TeamComponent dataTeam={userState.team} budget={1000} />
     </LayoutPage>
   )
 }

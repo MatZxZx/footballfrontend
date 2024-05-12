@@ -4,15 +4,19 @@ export const navbarSlice = createSlice({
   name: 'navbar',
   initialState: {
     valueInactive: '',
-    selectedIcon: ''
+    selectedIcon: '',
+    showNavbar: false
   },
   reducers: {
     changeIcon: (state, action) => {
       state.selectedIcon = action.payload.value
+    },
+    changeShowNavbar: (state, action) => {
+      state.showNavbar = action.payload.value
     }
   }
 })
 
-export const { changeIcon } = navbarSlice.actions
+export const { changeIcon, changeShowNavbar } = navbarSlice.actions
 
 export default navbarSlice.reducer

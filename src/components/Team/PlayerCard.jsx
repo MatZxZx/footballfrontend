@@ -1,7 +1,10 @@
-import { getPositionColor } from '../../helpers/func'
+import { getPlayerPoints, getPositionColor } from '../../helpers/func'
 import { notify, errorNotify } from '../../hooks/useNoty'
+import useUser from '../../hooks/useUser'
 
-function PlayerCard({ player, team, setTeam, onBanking }) {
+function PlayerCard({ player, onBanking }) {
+
+  const { setTeam } = useUser()
 
   const color = getPositionColor(player.section)
 
@@ -71,13 +74,12 @@ function PlayerCard({ player, team, setTeam, onBanking }) {
     reset()
   }
 
-  let classNameContainer = 'min-w-[126px] max-w-[126px] flex flex-col items-center justify-center text-center'
-  let classNameP = `w-full block text-[0.70rem] text-[${color}] font-poppins font-semibold bg-[#202020] mb-0.5`
+  let classNameContainer = 'min-w-[126px] max-w-[126px] h-[116px] flex flex-col items-center justify-center text-center relative'
+  let classNameP = `w-full block text-[0.70rem] text-[${color}] font-poppins font-semibold bg-[#202020] mb-0.5 px-2`
   let classNamePPoints = `w-full block text-[0.50rem] text-white bg-[#202020] font-poppins font-semibold`
 
   if (player.selected) {
     classNameContainer = `${classNameContainer} scale-125 selected-player-${player.section.toLowerCase()}`
-    classNameP = `${classNameP} `
 
   } else if (player.inactive) {
     classNameContainer = `${classNameContainer} brightness-[.3]`
@@ -85,12 +87,12 @@ function PlayerCard({ player, team, setTeam, onBanking }) {
     classNameContainer = `${classNameContainer} cursor-pointer hover:scale-125 transition-all brightness-[1.1]`
   }
 
-  console.log(player)
-
   return <div className={classNameContainer} onClick={onBanking ? handleClickOnBanking : handleClickOnField}>
-      <img className='w-12' src="/src/assets/shirt.png" alt={player.name} />
-      <p className={classNameP}>{player.name}</p>
-      <span className={classNamePPoints}>{player.points} PTS</span>
+    <img className='w-12' src="/src/assets/shirt.png" alt={player.name} />
+    <div className='absolute bottom-0'>
+      <p style={{color: getPositionColor(player.position)}} className={classNameP}>{player.name}</p>
+      <span className={classNamePPoints}>{getPlayerPoints(player)} PTS</span>
+    </div>
   </div>
 }
 

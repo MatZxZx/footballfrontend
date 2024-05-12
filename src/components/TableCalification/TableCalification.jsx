@@ -1,20 +1,38 @@
 import { useState } from 'react'
-import playersList from '../../data/players'
 import { useEffect } from 'react'
 import PlayerListed from '../HomePlayerListed/PlayerListed'
+import { getPlayerPoints } from '../../helpers/func'
 import './tabla.css'
+import GridLoader from 'react-spinners/GridLoader'
 
-function TableCalification() {
-  const [players, setPlayers] = useState([])
+function TableCalification({ users }) {
+
+  const [showUsers, setUsers] = useState([])
 
   useEffect(() => {
-    setPlayers([ ...playersList ])
-  }, [])
+    const formatUser = users.map((u, i) => {
+      const pointsAlign = u.team.align.players.reduce((acum, p) => acum + getPlayerPoints(p), 0)
+      const pointsBanking = u.team.banking.players.reduce((acum, p) => acum + getPlayerPoints(p), 0)
+      return {
+        ...u,
+        points: pointsAlign + pointsBanking
+      }
+    })
+    formatUser.sort((a, b) => b.points - a.points)
+    setUsers(formatUser.map((u, i) => ({...u, place: i + 1})))
+  }, [users])
 
+  if (!showUsers.length) {
+    return (
+      <div className='h-60 w-full flex justify-center items-center bg-card flow-shadow-primary rounded-md'>
+        <GridLoader color='#C2DD8D'/>
+      </div>
+    )
+  }
   return (
-    <div className='w-[512px] flow-shadow rounded-lg bg-[#202020] hidden-conten-tabla px-4 py-2'>
+    <div className='min-h-max max-h-60 flow-shadow-primary rounded-md bg-card hidden-conten-tabla px-4 py-2'>
       {
-        players.map((player, i) => <PlayerListed key={i} name={player.name} place={i + 1} points={player.points} team={player.teamname} />)
+        showUsers.map(user => <PlayerListed key={user.id} user={user} />)
       }
     </div>
   )

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../ButtonAuth/Button'
 import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
+import { loginRequest } from '../../services/auth'
 import './formLogin.css'
 
 function FormLogin() {
@@ -41,15 +42,22 @@ function FormLogin() {
       setErrorPassword(true)
     }
     if (email !== '' && password !== '') {
-      console.log('todo OK')
-      setAuth(true)
-      setLoading(false)
-      setUserState({
-        id: '',
-        username: '',
-        email
-      })
-      navigate('/home')
+      setLoading(true)
+      try {
+        const res = await loginRequest(email, password)
+        if (res.status === 200) {
+          console.log('OK')
+          setLoading(false)
+          setAuth(true)
+          setUserState(res.data)
+          navigate('/home')
+        }
+      } catch (e) {
+        console.log(e)
+        setErrorEmail(true)
+        setErrorPassword(true)
+        setLoading(false)
+      }
     }
 
   }
@@ -72,7 +80,7 @@ function FormLogin() {
   }
 
   function getInputClassName(errorState) {
-    return `${errorState ? 'input-auth-invalid' : ''} input-auth`
+    return `${errorState ? 'input-auth-invalid' : ''} input-auth px-4 py-2 text-sm rounded-md`
   }
 
   const passwordIcon = <i className="fa-solid fa-eye"></i>
@@ -80,31 +88,33 @@ function FormLogin() {
   const currentPasswordIcon = !hiddenPassword ? passwordIcon : passwordVisibilityIcon
 
   return (
-    <form className='w-full form-auth' onSubmit={handleSubmit} >
+    <form className='w-full form-auth font-poppins' onSubmit={handleSubmit} >
       <div>
-        {errorEmail && <p className='text-red-500 mb-1'>Campo requerido *</p>}
+        {errorEmail && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorEmail && <p className='text-sm text-primary mb-1'>Email</p>}
         <input
           name='email'
           className={getInputClassName(errorEmail)}
           type='text'
-          placeholder='Nombre de usuario o Mail...'
+          placeholder='Email'
           autoFocus
           value={user.email.value}
           onChange={handleChange}
           onFocus={handleFocus} />
       </div>
       <div>
-        {errorPassword && <p className='text-red-500 mb-1'>Campo requerido *</p>}
+        {errorPassword && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorPassword && <p className='text-sm text-primary mb-1'>Password</p>}
         <div className='container-password-input'>
           <input
             name='password'
             className={getInputClassName(errorPassword)}
             type={hiddenPassword ? 'password' : 'text'}
-            placeholder='Contaseña...'
+            placeholder='Contaseña'
             value={user.password.value}
             onChange={handleChange}
             onFocus={handleFocus} />
-          <button className='hidden-password-btn-input-login' onClick={() => setHiddenPassword(!hiddenPassword)} type='button'>
+          <button className={`text-xs hidden-password-btn-input-login text-primary ${errorPassword ? 'text-red-500' : ''}`} onClick={() => setHiddenPassword(!hiddenPassword)} type='button'>
             {
               currentPasswordIcon
             }
@@ -112,8 +122,10 @@ function FormLogin() {
         </div>
         
       </div>
-      <Button className='log' type='submit'>Iniciar Sesion</Button>
-      <Button className='reg' onClick={handleClickRegister} type='button' >Registrarse</Button>
+      <div className='w-full flex gap-2'>
+        <button className='w-1/2 text-white bg-secondary px-2 py-1 rounded-md text-sm' onClick={handleClickRegister}>Registrate</button>
+        <button className='w-1/2 text-black bg-primary px-2 py-1 rounded-md text-sm' type='submit'>Iniciar Sesion</button>
+      </div>
     </form>
   )
 }

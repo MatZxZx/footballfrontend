@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { changeIcon } from '../redux/features/navbar/navbarSlice'
+import { changeIcon, changeShowNavbar } from '../redux/features/navbar/navbarSlice'
 
 function useNavbar() {
   const dispatch = useDispatch()
@@ -10,8 +10,15 @@ function useNavbar() {
     }))
   }
 
+  function setShowNavbar(value) {
+    dispatch(changeShowNavbar({
+      value
+    }))
+  }
+
   return {
     setIcon,
+    setShowNavbar
   }
 }
 

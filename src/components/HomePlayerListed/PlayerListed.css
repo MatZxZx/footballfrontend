@@ -2,8 +2,6 @@
     color: white;
     text-align: center;
     font-family: "Poppins", sans-serif;
-    width: 100%;
-    padding: 12px 24px;
 }
 
 .playerNameNTeam {
@@ -28,6 +26,4 @@
 }
 
 .playerImg {
-    width: 72px;
-    height: 72px;
 }

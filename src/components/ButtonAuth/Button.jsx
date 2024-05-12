@@ -9,7 +9,7 @@ function Button({ className, onClick, children, ...props }) {
   }
 
   return (
-    <button onFocus={() => console.log('hola')} className={`btn-auth ${className}`} onClick={handleClick} {...props}>
+    <button className={`btn-auth ${className}`} onClick={handleClick} {...props}>
       {children}
     </button>
   )

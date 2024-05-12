@@ -1,13 +1,13 @@
-import React from 'react'
 import Continue from '../../components/RegisterContinue/RegisterContinue'
-import ScrollFilter from '../../components/ScrollFilter/ScrollFilter'
+import LayoutPage from '../../layouts/LayoutPage'
+import { useSelector } from 'react-redux'
 
 function Welcome() {
+  const userState = useSelector(state => state.user.user)
   return (
-    <div>
-      {/* <Continue /> */}
-      {/* <ScrollFilter />       */}
-    </div>
+    <LayoutPage>
+      <Continue user={userState}/>
+    </LayoutPage>
   )
 }
 

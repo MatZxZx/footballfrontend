@@ -5,14 +5,26 @@
     width: 100%;
 }
 
-.continueButton {
-    position: absolute;
+.animate-football {
+    animation: animate-football 2s infinite linear;
 }
 
-.steps {
-    font-size: x-large;
+.btn-register-continue:hover .animate-football {
+    animation: animate-football 1s infinite linear;
 }
 
-.welcome {
-    font-size: xx-large;
+@keyframes animate-football {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.itemn {
+    list-style: disc;
 }

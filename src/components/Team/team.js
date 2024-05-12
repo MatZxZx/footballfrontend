@@ -14,9 +14,10 @@ class Change {
 }
 
 class TeamClass {
+
   constructor(onField, onBanking, sections, changeField, changeBanking) {
-    this.field = this.playersAdapter(onField) // jugadores en campo
-    this.banking = this.playersAdapter(onBanking) // jugadores en banca
+    this.field = this.playersAdapter(onField, 'align') // jugadores en campo
+    this.banking = this.playersAdapter(onBanking, 'banking') // jugadores en banca
     this.sections = sections ? sections : [[], [], [], []] // secciones: DEL, MD, DF, PT.
     this.changeField = changeField ? changeField : new Change()
     this.changeBanking = changeBanking ? changeBanking : new Change()
@@ -51,14 +52,40 @@ class TeamClass {
     })
   }
 
-  playersAdapter(players) {
-    return players.map(p => {
+  playersAdapter(players, place) {
+    // console.log(players)
+    const r = [...players]
+    const iterations = place === 'align' ? 7 : 2
+    for (let i = 0; i < iterations - players.length; i++) {
+      const cantDEL = r.filter(p => p.section === 'DEL').length
+      const cantMC = r.filter(p => p.section === 'MC').length
+      const cantDF = r.filter(p => p.section === 'DF').length
+      const cantPT = r.filter(p => p.section === 'PT').length
+      let section
+      if (cantDEL < 2) {
+        section = 'DEL'
+      } else if (cantMC < 2) {
+        section = 'MC'
+      } else if (cantDF < 2) {
+        section = 'DF'
+      } else if (cantPT < 1) {
+        section = 'PT'
+      }
+      r.push({
+        name: '-',
+        section: section,
+        isEmpty: true,
+        points: 0
+      })
+    }
+    return r.map(p => {
       return {
         name: p.name,
         section: p.section,
         inactive: p.inactive === undefined ? false : p.inactive,
         selected: p.selected === undefined ? false : p.selected,
-        points: p.points
+        points: p.points,
+        isEmpty: p.isEmpty === undefined ? false : p.isEmpty
       }
     })
   }

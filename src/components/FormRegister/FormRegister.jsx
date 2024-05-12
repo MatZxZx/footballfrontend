@@ -1,10 +1,12 @@
-import './formRegister.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { changeUser } from '../../redux/features/auth/authSlice'
 import Button from '../ButtonAuth/Button'
-import { loginRequest } from '../../services/auth'
+import { registerRequest } from '../../services/auth'
+import useAuth from '../../hooks/useAuth'
+import useUser from '../../hooks/useUser'
+import useNavbar from '../../hooks/useNavbar'
+import { useSelector } from 'react-redux'
+import './formRegister.css'
 
 function FormRegister() {
 
@@ -30,8 +32,10 @@ function FormRegister() {
       setError: setErrorPassword
     }
   })
+  const { setAuth, setLoading } = useAuth()
+  const { setUser: setUserState } = useUser()
+  const { setShowNavbar } = useNavbar()
 
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   function handleFocus(e) {
@@ -58,16 +62,15 @@ function FormRegister() {
       setErrorPassword(true)
     }
     if (username !== '' && teamname !== '' && email !== '' && password !== '') {
-      // const res = await registerRequest({ email, password })
-      // if (res.status === 'ok') {
-      console.log('todo OK')
-      navigate('/')
-      // }
+      setLoading(true)
+      const res = await registerRequest(username, teamname, email, password)
+      if (res.status === 200) {
+        setUserState(res.data)
+        setAuth(true)
+        navigate('/welcome')
+      }
+      setLoading(false)
     }
-    // dispatch(changeUser({
-    //   email,
-    //   password
-    // }))
   }
 
   function handleClickCancel() {

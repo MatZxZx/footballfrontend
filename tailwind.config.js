@@ -18,7 +18,8 @@ export default {
       backgroundColor: {
         focus: '#58C6CD',
         secondary: '#247855',
-        error: '#B81212'
+        error: '#B81212',
+        card: '#181818'
       }
     },
   },
