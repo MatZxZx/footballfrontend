@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { changeIsAuth, changeIsLoading } from '../redux/features/auth/authSlice'
+import { changeIsAuth, changeIsLoading, changeIsRegister } from '../redux/features/auth/authSlice'
 
 function useAuth() {
   const dispatch = useDispatch()
@@ -15,10 +15,17 @@ function useAuth() {
       value
     }))
   }
+
+  function setRegister(value) {
+    dispatch(changeIsRegister({
+      value
+    }))
+  }
   
   return {
     setAuth,
-    setLoading
+    setLoading,
+    setRegister
   }
 }
 

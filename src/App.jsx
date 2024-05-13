@@ -49,13 +49,13 @@ function App() {
         </Route>
         {/* Rutas Protegidas */}
         <Route element={<ProtectedRoute />} >
-          {/* <Route element={<ProtectedRoutesTeam />}> */}
+            <Route path='/welcome' element={<Welcome />} />
+          <Route element={<ProtectedRoutesTeam />}>
             <Route path='/home' element={<Home />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/welcome' element={<Welcome />} />
             <Route path='/team' element={<Team />} />
             <Route path='/rank' element={<Rank />} />
-          {/* </Route> */}
+          </Route>
           <Route path='/transfer' element={<Transfer />} />
         </Route>
         <Route path='/*' element={<NotFound />} />

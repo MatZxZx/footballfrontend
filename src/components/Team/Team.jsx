@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PlayerCard from './PlayerCard'
 import { useSelector } from 'react-redux'
 
@@ -10,6 +11,10 @@ function Team() {
     const mc = players.filter(p => p.position === 'MC')
     const df = players.filter(p => p.position === 'DF')
     const pt = players.filter(p => p.position === 'PT')
+    del.sort((a, b) => a.order - b.order)
+    mc.sort((a, b) => a.order - b.order)
+    df.sort((a, b) => a.order - b.order)
+    pt.sort((a, b) => a.order - b.order)
     return [del, mc, df, pt]
   }
 
@@ -33,7 +38,7 @@ function Team() {
               return <div key={i} className='flex'>
                 {
                   s.map((p, j) => {
-                    return <PlayerCard key={p.id + i + j} player={p} />
+                    return <PlayerCard key={`${p.name + ' ' + p.lastname}`} player={p} />
                   })
                 }
               </div>
@@ -45,13 +50,12 @@ function Team() {
       <div className='flex flex-col items-center gap-2'>
           <h2 className='text-xl font-semibold'>Banca</h2>
           {
-            userState.team.banking.players.map((p, i) => {
-              return <PlayerCard key={p.id + i} player={p} />
+            userState.team.banking.players.toSorted((a, b) => a.order - b.order).map((p, i) => {
+              return <PlayerCard key={`${p.name + ' ' + p.lastname}`} player={p} onBanking={true} />
             })
           }
         </div>
     </div>
   )
 }
-
 export default Team

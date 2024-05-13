@@ -27,12 +27,12 @@ function Navbar() {
   const { setAuth } = useAuth()
   const { setUser } = useUser()
 
-  if ((!authState.isAuth) || (userState.team.align.players.length < 7 || userState.team.banking.players.length < 2)) {
-    return (
-      <>
-      </>
-    )
-  }
+    if ((!authState.isAuth) || (userState.team.align.players.length < 7 || userState.team.banking.players.length < 2)) {
+      return (
+        <>
+        </>
+      )
+    }
 
   async function handleClick() {
     try {

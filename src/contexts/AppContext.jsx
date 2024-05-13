@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { verifyTokenRequest } from '../services/auth'
 import useAuth from '../hooks/useAuth'
 import useUser from '../hooks/useUser'
+import { players } from '../data/team'
 
 const AppContext = createContext()
 
@@ -23,12 +24,16 @@ export function AppContextProvider({ children }) {
         if (res.status === 200) {
           setAuth(true)
           setLoading(false)
-          setUser(res.data)
+          // res.data.team.align.players = players.align.map(p => ({ ...p, isSelected: false, isInactive: false }))
+          // res.data.team.banking.players = players.banking.map(p => ({ ...p, isSelected: false, isInactive: false }))
+          setUser({ ...res.data })
           return
         }
         setAuth(false)
         setLoading(false)
+
       } catch (e) {
+        console.log(e)
         setAuth(false)
         setLoading(false)
       }

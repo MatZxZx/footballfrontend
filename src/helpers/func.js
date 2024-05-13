@@ -52,3 +52,29 @@ export function getPlayerPoints(p) {
 
     return points
 }
+
+export function getOrder(listPlayers) {
+  let is0 = false
+  let is1 = false
+  let is2 = false
+  listPlayers.forEach(p => {
+    switch (p.order) {
+      case 0:
+        is0 = true
+        break
+      case 1:
+        is1 = true
+        break
+      case 2:
+        is2 = true
+        break
+    }
+  })
+  if (!is0) {
+    return 0
+  } else if (!is1) {
+    return 1
+  } else if (!is2) {
+    return 2
+  }
+}

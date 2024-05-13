@@ -5,7 +5,7 @@ function Register() {
   return (
     <LayoutPage>
       <div className='flex flex-col gap-2 justify-center items-center'>
-        <h1 className='text-white font-poppins font-bold text-4xl mb-4'>Inicia Sesion o Registrate</h1>
+        <h1 className='text-primary font-poppins font-bold text-2xl mb-4'>Register</h1>
         <div className='w-[512px]'>
           <FormRegister />
         </div>

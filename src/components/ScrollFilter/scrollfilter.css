@@ -65,3 +65,13 @@
     font-weight: bold;
     background-color: #58C6CD;
 }
+
+.filter-scroll-btn-inabilit {
+    color: #525252;
+    cursor: auto;
+}
+
+.filter-scroll-btn-inabilit:hover {
+    background-color: transparent;
+    color: #525252;
+}

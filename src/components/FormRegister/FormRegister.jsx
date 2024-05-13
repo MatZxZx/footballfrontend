@@ -6,7 +6,6 @@ import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
 import useNavbar from '../../hooks/useNavbar'
 import { useSelector } from 'react-redux'
-import './formRegister.css'
 
 function FormRegister() {
 
@@ -32,7 +31,7 @@ function FormRegister() {
       setError: setErrorPassword
     }
   })
-  const { setAuth, setLoading } = useAuth()
+  const { setAuth, setLoading, setRegister } = useAuth()
   const { setUser: setUserState } = useUser()
   const { setShowNavbar } = useNavbar()
 
@@ -66,8 +65,8 @@ function FormRegister() {
       const res = await registerRequest(username, teamname, email, password)
       if (res.status === 200) {
         setUserState(res.data)
+        setRegister(true)
         setAuth(true)
-        navigate('/welcome')
       }
       setLoading(false)
     }
@@ -78,6 +77,7 @@ function FormRegister() {
   }
 
   function handleChange(e) {
+    // console.log(e.target.value)
     const field = e.target.name
     const value = e.target.value
     setUser({
@@ -91,60 +91,64 @@ function FormRegister() {
   }
 
   function getInputClassName(errorState) {
-    return `${errorState ? 'input-auth-invalid' : ''} input-auth`
+    return `${errorState ? 'input-auth-invalid' : ''} input-auth px-4 py-2 text-sm rounded-md`
   }
 
   return (
     <form className='form-auth' onSubmit={handleSubmit} >
-      <div>
+      <div className='w-full'>
         {errorUsername && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorUsername && <p className='text-sm text-primary mb-1'>Username</p>}
         <input
           name='username'
           className={getInputClassName(errorUsername)}
           type='text'
-          placeholder='Nombre de usuario...'
+          placeholder='Nombre de usuario'
           autoFocus
           value={user.username.value}
           onChange={handleChange}
           onFocus={handleFocus} />
       </div>
-      <div>
+      <div className='w-full'>
         {errorTeamname && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorTeamname && <p className='text-sm text-primary mb-1'>Teamname</p>}
         <input
           name='teamname'
           className={getInputClassName(errorTeamname)}
           type='text'
-          placeholder='Nombre del equipo...'
+          placeholder='Nombre del equipo'
           value={user.teamname.value}
           onChange={handleChange}
           onFocus={handleFocus} />
       </div>
-      <div>
+      <div className='w-full'>
         {errorEmail && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorEmail && <p className='text-sm text-primary mb-1'>Email</p>}
         <input
           name='email'
           className={getInputClassName(errorEmail)}
           type='text'
-          placeholder='Mail...'
+          placeholder='Mail'
           autoFocus
           value={user.email.value}
           onChange={handleChange}
           onFocus={handleFocus} />
       </div>
-      <div>
+      <div className='w-full'>
         {errorPassword && <p className='text-sm text-red-500 mb-1'>Campo requerido *</p>}
+        {!errorPassword && <p className='text-sm text-primary mb-1'>Password</p>}
         <input
           name='password'
           className={getInputClassName(errorPassword)}
           type='password'
-          placeholder='Contaseña...'
+          placeholder='Contraseña'
           value={user.password.value}
           onChange={handleChange}
           onFocus={handleFocus} />
       </div>
-      <div className='flex gap-2 w-full'>
-        <Button className='can w-1/2' onClick={handleClickCancel} type='button'>Cancelar</Button>
-        <Button className='reg w-1/2' type='submit'>Registrarse</Button>
+      <div className='w-full flex gap-2'>
+        <button className='w-1/2 text-white bg-secondary px-2 py-1 rounded-md text-sm' type='button' onClick={handleClickCancel}>Cancelar</button>
+        <button className='w-1/2 text-black bg-primary px-2 py-1 rounded-md text-sm' type='submit'>Registrate</button>
       </div>
     </form>
   )

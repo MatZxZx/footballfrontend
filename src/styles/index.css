@@ -46,7 +46,7 @@ body::-webkit-scrollbar-thumb {
 
 .selected-player-del p {
     background-color: #C71919;
-    color: #202020;
+    color: #202020!important;
 }
 
 .selected-player-mc img {
@@ -55,7 +55,7 @@ body::-webkit-scrollbar-thumb {
 
 .selected-player-mc p {
     background-color: #E3E816;
-    color: #202020;
+    color: #202020!important;
 }
 
 .selected-player-df img {
@@ -64,7 +64,7 @@ body::-webkit-scrollbar-thumb {
 
 .selected-player-df p {
     background-color: #58C6CD;
-    color: #202020;
+    color: #202020!important;
 }
 
 .selected-player-pt img {
@@ -73,7 +73,7 @@ body::-webkit-scrollbar-thumb {
 
 .selected-player-pt p {
     background-color: #CC40E2;
-    color: #202020;
+    color: #202020!important;
 }
 
 .custom-toast {

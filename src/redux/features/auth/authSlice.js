@@ -5,7 +5,8 @@ export const authSlice = createSlice({
   initialState: {
     auth: {
       isAuth: false,
-      isLoading: true
+      isLoading: true,
+      isRegister: false
     }
   },
   reducers: {
@@ -14,10 +15,13 @@ export const authSlice = createSlice({
     },
     changeIsLoading: (state, action) => {
       state.auth.isLoading = action.payload.value
-    }
+    },
+    changeIsRegister: (state, action) => {
+      state.auth.isRegister = action.payload.value
+    },
   }
 })
 
-export const { changeIsAuth, changeIsLoading } = authSlice.actions
+export const { changeIsAuth, changeIsLoading, changeIsRegister } = authSlice.actions
 
 export default authSlice.reducer

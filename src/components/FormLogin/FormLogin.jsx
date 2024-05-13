@@ -46,18 +46,18 @@ function FormLogin() {
       try {
         const res = await loginRequest(email, password)
         if (res.status === 200) {
-          console.log('OK')
-          setLoading(false)
           setAuth(true)
           setUserState(res.data)
           navigate('/home')
+        } else {
+          setErrorEmail(true)
+          setErrorPassword(true)  
         }
       } catch (e) {
-        console.log(e)
         setErrorEmail(true)
         setErrorPassword(true)
-        setLoading(false)
       }
+      setLoading(false)
     }
 
   }
@@ -110,7 +110,7 @@ function FormLogin() {
             name='password'
             className={getInputClassName(errorPassword)}
             type={hiddenPassword ? 'password' : 'text'}
-            placeholder='Contaseña'
+            placeholder='Contraseña'
             value={user.password.value}
             onChange={handleChange}
             onFocus={handleFocus} />
@@ -123,7 +123,7 @@ function FormLogin() {
         
       </div>
       <div className='w-full flex gap-2'>
-        <button className='w-1/2 text-white bg-secondary px-2 py-1 rounded-md text-sm' onClick={handleClickRegister}>Registrate</button>
+        <button className='w-1/2 text-white bg-secondary px-2 py-1 rounded-md text-sm' type='button' onClick={handleClickRegister}>Registrate</button>
         <button className='w-1/2 text-black bg-primary px-2 py-1 rounded-md text-sm' type='submit'>Iniciar Sesion</button>
       </div>
     </form>

@@ -9,8 +9,13 @@ function ProtecteAuthRoutes() {
   if (authState.isLoading)
     return <LoadingPage/>
   
-  if (authState.isAuth)
-    return <Navigate to='/home' replace />
+  if (authState.isAuth) {
+    if (authState.isRegister) {
+      return <Navigate to='/welcome' replace />
+    } else {
+      return <Navigate to='/home' replace />
+    }
+  }
 
   return <Outlet />
 }
