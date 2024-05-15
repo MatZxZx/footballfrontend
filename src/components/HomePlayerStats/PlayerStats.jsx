@@ -33,11 +33,11 @@ export default function StatsGrid({ players }) {
         <GridLoader color='#C2DD8D'/>
       </div>
   )
-
+  
   return (
     <div className="w-full h-44 parent bg-card rounded-md px-4 py-2 flow-shadow-primary">
       {
-        players.map(p => <PlayerStats key={p.player.id} playerName={p.player.name + ' ' + p.player.lastname} position={p.player.position} points={p.points} />)
+        players.map(p => <PlayerStats key={p.id} playerName={p.name + ' ' + p.lastname} position={p.position} points={p.points} />)
       }
     </div>
   )

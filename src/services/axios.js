@@ -8,12 +8,12 @@ const instance = axios.create({
     
 })
 
-instance.interceptors.request.use((request) => {
-    return request
-})
+// instance.interceptors.request.use((request) => {
+//     return request
+// })
 
-instance.interceptors.response.use((response) => {
-    return response
-})
+// instance.interceptors.response.use((response) => {
+//     return response
+// })
 
 export default instance

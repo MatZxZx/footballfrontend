@@ -40,25 +40,25 @@ function StarsPlayer({ valorations }) {
   )
 }
 
-function CardHomeLastWeek({ className = '', name, position, points, price, status, valortions = 5, timesBought = 5 }) {
+function CardHomeLastWeek({ player, status }) {
   return (
-    <div className={`w-full flex items-center px-8 p-4 text-white bg-card flow-shadow rounded-md font-poppins hover:bg-[#101010] cursor-pointer flow-shadow-secondary ${className}`}>
+    <div className='w-full flex items-center px-8 p-4 text-white bg-card flow-shadow rounded-md font-poppins hover:bg-[#101010] cursor-pointer flow-shadow-secondary'>
       <div>
         <img className="w-20" src="/src/assets/shirt.png" alt="shirt" />
       </div>
       <div className="w-full pl-4">
         <div className="mb-2">
-          <p className="text-lg font-medium">{name} <span style={{ color: getPositionColor(position) }} className='font-semibold italic'>{position}</span></p>
+          <p className="text-lg font-medium">{player.name} <span style={{ color: getPositionColor(player.position) }} className='font-semibold italic'>{player.position}</span></p>
         </div>
         <div className="flex gap-8">
           <div className="flex gap-2 items-center text-sm font-semibold">
-            <p>{points} <span className="text-focus">PTS</span></p>
+            <p>{player.points} <span className="text-focus">PTS</span></p>
             <div className="w-[1px] h-full bg-white"></div>
-            <p>{price}<span className="text-focus">$</span></p>
+            <p>{player.price}<span className="text-focus">$</span></p>
             <div className="w-[1px] h-full bg-white"></div>
-            <p>{timesBought}<span className="text-focus"> Bought</span></p>
+            <p>{player.timesBought}<span className="text-focus"> Bought</span></p>
           </div>
-          <StarsPlayer valorations={valortions} />
+          <StarsPlayer valorations={player.valortions} />
         </div>
       </div>
       {
@@ -68,9 +68,15 @@ function CardHomeLastWeek({ className = '', name, position, points, price, statu
   )
 }
 
-function HomeLastWeek({ more, less }) {
+function HomeLastWeek({ more, less, isLoading }) {
 
-  if ((!more.player) || (!less.player))
+  // if (isLoading) {
+  //   return <div className="w-full h-48 flex justify-center items-center bg-card rounded-md mb-12 flow-shadow-secondary">
+  //     <p className="text-primary font-poppins font-medium">No se encotraron jugadores</p>
+  //   </div>
+  // }
+
+  if ((!more) || (!less))
     return (
       <div className="w-full h-48 flex justify-center items-center bg-card rounded-md mb-12 flow-shadow-secondary">
         <GridLoader color="#C2DD8D" />
@@ -79,8 +85,8 @@ function HomeLastWeek({ more, less }) {
 
   return (
     <div className="w-full h-48 flex flex-col gap-4 mb-12">
-      <CardHomeLastWeek name={more.player.name + ' ' + more.player.lastname} position={more.player.position} points={more.points} price={more.player.price} timesBought={more.timesBought} valortions={more.player.valorations} status={true} />
-      <CardHomeLastWeek name={less.player.name + ' ' + less.player.lastname} position={less.player.position} points={less.points} price={less.player.price} timesBought={less.timesBought} valortions={less.player.valorations} />
+      <CardHomeLastWeek player={more} status />
+      <CardHomeLastWeek player={less} />
     </div>
   )
 }

@@ -5,15 +5,14 @@ import useUser from '../../hooks/useUser'
 import { useSelector } from 'react-redux'
 import PlayerValoration from '../Valorations/PlayerValoretion'
 import { errorNotify } from '../../hooks/useNoty'
+import { postPlayerToAlignRequest, postPlayerToBankingRequest } from '../../services/user'
 
 function PlayerSearch({ name, setName, players, setPlayer }) {
-
   function handleSubmit(evento) {
     evento.preventDefault()
     setPlayer(players.filter(player => player.name.toLowerCase().includes(name.toLowerCase())))
     setName("")
   }
-
   return (
     <div className='w-full'>
       <form className='w-full' onSubmit={handleSubmit}>
@@ -24,21 +23,36 @@ function PlayerSearch({ name, setName, players, setPlayer }) {
 }
 
 function PlayerToExit({ player, setShowModel, setCurrentPlayer }) {
-
   const userState = useSelector(state => state.user.user)
-  const { deletePlayerOnTeamById } = useUser()
+  const { setBudget, deletePlayerOnTeamById } = useUser()
 
-
-  function handleClick() {
-    setShowModel(false)
-    if (player.id !== 0) {
-      deletePlayerOnTeamById(player.id)
-    } else {
-
+  async function addPlayer(p, currentP) {
+    try {
+      if (currentP.isBanking) {
+        postPlayerToBankingRequest({
+          userId: userState.id,
+          playerId: p.id,
+          order: currentP.order
+        }).then(e => console.log('OK')).catch(e => console.log(e))
+      } else {
+        postPlayerToAlignRequest({
+          userId: userState.id,
+          playerId: p.id,
+          order: currentP.order
+        }).then(e => console.log('OK')).catch(e => console.log(e))
+      }
+    } catch (e) {
+      console.log(e)
     }
-    setCurrentPlayer({})
   }
 
+  function handleClick() {
+    addPlayer(player, player)
+    setBudget(userState.budget + player.price)
+    deletePlayerOnTeamById(player.id)
+    setCurrentPlayer({})
+    setShowModel(false)
+  }
   return (
     <div onClick={handleClick} className='w-full text-xs text-white font-poppins bg-[#222] rounded-md hover:bg-[#101010] px-4 py-2 cursor-pointer flex'>
       <div className='w-full flex flex-col gap-2'>
@@ -82,33 +96,38 @@ function PlayerToExit({ player, setShowModel, setCurrentPlayer }) {
 }
 
 function PlayerListed({ player, setShowModel, currentPlayer, setCurrentPlayer }) {
-
   const userState = useSelector(state => state.user.user)
   const { addPlayerAlign, addPlayerBanking, deletePlayerOnTeamById, setBudget } = useUser()
 
-  function addPlayer(p, currentP) {
-    if (!currentP.isBanking) {
-      addPlayerAlign({ ...p, order: currentP.order })
-    } else {
-      addPlayerBanking({ ...p, order: currentP.order })
+  async function addPlayer(p, currentP) {
+    try {
+      if (currentP.isBanking) {
+        postPlayerToBankingRequest({
+          userId: userState.id,
+          playerId: p.id,
+          order: currentP.order
+        }).then(e => console.log('OK')).catch(e => console.log(e))
+        addPlayerBanking({ ...p, order: currentP.order })        
+      } else {
+        postPlayerToAlignRequest({
+          userId: userState.id,
+          playerId: p.id,
+          order: currentP.order
+        }).then(e => console.log('OK')).catch(e => console.log(e))
+        addPlayerAlign({ ...p, order: currentP.order })
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
-
-  function reset() {
-    errorNotify('No se puede comprar el jugador')
-    setShowModel(false)
-    setCurrentPlayer({})
-  }
-
-  // function deletePlayer(playerId) {
-
-  // }
 
   function handleOnclick() {
     const ids = [
       ...userState.team.align.players.map(p => p.id),
       ...userState.team.banking.players.map(p => p.id)
     ]
+    let error = false
+
     if (userState.budget - player.price < 0) {
       if (currentPlayer.id !== 0) {
         if (userState.budget + currentPlayer.price - player.price > 0) {
@@ -116,20 +135,25 @@ function PlayerListed({ player, setShowModel, currentPlayer, setCurrentPlayer })
           addPlayer(player, currentPlayer)
           setBudget(userState.budget + currentPlayer.price - player.price)
         } else {
-          reset()
+          error = true
         }
       } else {
-        reset()
+        error = true
       }
-
     } else {
       if (ids.includes(currentPlayer.id)) {
         deletePlayerOnTeamById(currentPlayer.id)
       }
       addPlayer(player, currentPlayer)
-      setBudget(userState.budget - player.price)
+      if (currentPlayer.id !== 0) {
+        setBudget(userState.budget + currentPlayer.price - player.price)
+      } else {
+        setBudget(userState.budget - player.price)
+      }
     }
-
+    if (error) {
+      errorNotify('No se puede comprar el jugador')
+    }
     setShowModel(false)
     setCurrentPlayer({})
   }
@@ -181,15 +205,15 @@ function PlayersOnScreen({ players, setShowModel, setCurrentPlayer, currentPlaye
     <div className='min-h-[512px] max-h-[512px] px-4 py-4 overflow-auto scroll flex flex-col gap-4'>
       {
         currentPlayer.id
-        ? <p className='text-xs font-medium text-error'><i className="fa-solid fa-arrow-right"></i> Jugador que sale </p>
-        : <></>
+          ? <p className='text-xs font-medium text-error'>Jugador que sale <i className="fa-solid fa-arrow-right"></i></p>
+          : <></>
       }
       {
         currentPlayer.id
-        ? <PlayerToExit player={currentPlayer} setCurrentPlayer={setCurrentPlayer} setShowModel={setShowModel}/>
-        : <></>
+          ? <PlayerToExit player={currentPlayer} setCurrentPlayer={setCurrentPlayer} setShowModel={setShowModel} />
+          : <></>
       }
-      <p className='text-xs font-medium text-secondary'><i className="fa-solid fa-arrow-left"></i>Jugadores que entran</p>
+      <p className='text-xs font-medium text-secondary'><i className="fa-solid fa-arrow-left"></i> Jugadores que entran</p>
       {
         players.map(p => <PlayerListed key={p.id * 2} player={p} setShowModel={setShowModel} currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer} />)
       }
@@ -245,7 +269,7 @@ function ScrollFilter({ setCurrentPlayer, currentPlayer, setShowModel, players, 
       }
     }
     setScreen(res)
-  }, [position, statics, order, currentPlayer])
+  }, [position, statics, order, currentPlayer, players])
 
   const btnIsInabilit = userState.team.align.players.length < 7 || userState.team.banking.players.length < 2
 

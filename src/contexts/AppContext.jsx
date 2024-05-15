@@ -33,7 +33,7 @@ export function AppContextProvider({ children }) {
         setLoading(false)
 
       } catch (e) {
-        console.log(e)
+        // console.log(e)
         setAuth(false)
         setLoading(false)
       }

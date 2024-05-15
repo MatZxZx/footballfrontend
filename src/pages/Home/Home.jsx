@@ -9,8 +9,10 @@ import useNavbar from '../../hooks/useNavbar'
 
 function Home() {
 
+  const [isLoadingFour, setIsLoadingFour] = useState(false)
+  const [isLoadingBest, setIsLoadingBest] = useState(false)
   const [bestFourPlayers, setBestFourPlayers] = useState([])
-  const [moreAndLessBuy, setMoreAndLessBuy] = useState({more: {}, less: {}})
+  const [moreAndLessBuy, setMoreAndLessBuy] = useState([])
   const [users, setUsers] = useState([])
   const { setIcon } = useNavbar()
 
@@ -20,12 +22,18 @@ function Home() {
       const res = await getBestFourPlayersRequest()
       if (res.status === 200) {
         setBestFourPlayers([...res.data])
+        if (!res.data.length) {
+          setIsLoadingFour(true)
+        }
+      } else {
+        setIsLoadingFour(true)
       }
     }
     async function getMoreAndLessBuyPlayers() {
       const res = await getMoreAndLessBuyPlayersRequest()
       if (res.status === 200) {
         setMoreAndLessBuy({...res.data})
+        setIsLoadingBest(true)
       }
     }
     async function getUsers() {
@@ -49,11 +57,11 @@ function Home() {
           </div>
           <div>
             <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent mb-4">Mejores puntajes de la anterior semana</h2>
-            <StatsGrid players={bestFourPlayers}/>
+            <StatsGrid players={bestFourPlayers} isLoading={isLoadingFour}/>
           </div>
           <div>
             <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent mb-4">Fichajes ultima semana</h2>
-            <HomeLastWeek more={moreAndLessBuy.more} less={moreAndLessBuy.less} />
+            <HomeLastWeek isLoading={isLoadingBest} more={moreAndLessBuy[0]} less={moreAndLessBuy[1]} />
           </div>
         </div>
       </div>

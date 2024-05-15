@@ -4,14 +4,28 @@ export async function getUsersRequest() {
   return await axios.get('/user')
 }
 
-export async function postPlayerToAlignRequest({ userId, playerId }) {
+export async function postPlayerToAlignRequest({ userId, playerId, order }) {
   await axios.post(`/user/add-player-align/${userId}`, {
+    playerId,
+    order
+  })
+}
+
+export async function postPlayerToBankingRequest({ userId, playerId, order }) {
+  await axios.post(`/user/add-player-banking/${userId}`, {
+    playerId,
+    order
+  })
+}
+
+export async function deletePlayerToAlignRequest({ userId, playerId }) {
+  await axios.delete(`/user/delete-player-align/${userId}`, {
     playerId
   })
 }
 
-export async function postPlayerToBankingRequest({ userId, playerId }) {
-  await axios.post(`/user/add-player-banking/${userId}`, {
+export async function deletePlayerToBankingRequest({ userId, playerId }) {
+  await axios.delete(`/user/delete-player-banking/${userId}`, {
     playerId
   })
 }
@@ -28,7 +42,6 @@ export async function putPlayerBankingToBankingRequest({ userId, playerAId, play
     playerAId,
     playerBId
   })
-
 }
 
 export async function putPlayerAlignToBankingRequest({ userId, playerOnAlignId, playerOnBankingId }) {
