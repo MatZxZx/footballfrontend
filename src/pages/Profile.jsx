@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import LayoutPage from '../../layouts/LayoutPage'
-import { getPointsByUser } from '../../utilities/user.utilities'
-import useNavbar from '../../hooks/useNavbar'
-import { getWeeksRequest } from '../../services/user'
+import LayoutPage from '../layouts/LayoutPage'
+import { getPointsByUser } from '../utilities/user.utilities'
+import useNavbar from '../hooks/useNavbar'
+import { getWeeksRequest } from '../services/user'
 import BeatLoader from 'react-spinners/BeatLoader'
 
 function WeekPlayedCard({ week, points }) {

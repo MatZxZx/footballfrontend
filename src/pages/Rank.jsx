@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import LayoutPage from '../../layouts/LayoutPage'
-import { getPlayersRequest } from '../../services/player'
-import { getPositionColor, getPlayerPoints } from '../../helpers/func'
-import useNavbar from '../../hooks/useNavbar'
+import LayoutPage from '../layouts/LayoutPage'
+import { getPlayersRequest } from '../services/player'
+import { getPositionColor, getPlayerPoints } from '../helpers/func'
+import useNavbar from '../hooks/useNavbar'
 import GridLoader from 'react-spinners/GridLoader'
 
 const URL = import.meta.env.VITE_BACKEND_API

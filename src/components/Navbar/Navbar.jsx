@@ -1,38 +1,19 @@
-import { useEffect } from 'react'
-import useNavbar from '../../hooks/useNavbar'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import icons from './icons'
-import { toCapitalaze } from '../../helpers/func'
-import './navbar.css'
 import { logoutRequest } from '../../services/auth'
 import useAuth from '../../hooks/useAuth'
 import useUser from '../../hooks/useUser'
-
-function Icon({ name, icon, to, isSelected = false }) {
-  const { setIcon } = useNavbar()
-  return (
-    <Link to={to} onClick={() => (setIcon(name))} className={`min-w-max px-4 rounded-xl icon-navbar btn-ripple ${isSelected ? 'navbar-selected-icon' : ''} text-sm flex flex-col justify-center items-center gap-1 py-1`}>
-      {icon}
-      <p className='line-xs text-[0.55rem] text-center'>{toCapitalaze(name)}</p>
-    </Link>
-  )
-}
+import Icon from './Icon'
+import icons from './icons'
+import './navbar.css'
 
 function Navbar() {
+
   const navbarState = useSelector(state => state.navbar)
   const authState = useSelector(state => state.auth.auth)
   const userState = useSelector(state => state.user.user)
 
   const { setAuth } = useAuth()
   const { setUser } = useUser()
-
-    if ((!authState.isAuth) || (userState.team.align.players.length < 7 || userState.team.banking.players.length < 2)) {
-      return (
-        <>
-        </>
-      )
-    }
 
   async function handleClick() {
     try {
@@ -42,6 +23,13 @@ function Navbar() {
     } catch (e) {
       console.log(e)
     }
+  }
+
+  if ((!authState.isAuth) || (userState.team.align.players.length < 7 || userState.team.banking.players.length < 2)) {
+    return (
+      <>
+      </>
+    )
   }
 
   return (

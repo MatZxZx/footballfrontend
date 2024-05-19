@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import ScrollFilter from '../../components/ScrollFilter/ScrollFilter'
-import { getPlayersRequest } from '../../services/player'
-import useNavbar from '../../hooks/useNavbar'
+import { useEffect, useState } from 'react'
+import ScrollFilter from '../components/ScrollFilter/ScrollFilter'
+import { getPlayersRequest } from '../services/player'
+import useNavbar from '../hooks/useNavbar'
 import { useSelector } from 'react-redux'
-import LayoutPage from '../../layouts/LayoutPage'
-import { getPlayerPoints, getPositionColor } from '../../helpers/func'
-import { errorNotify } from '../../hooks/useNoty'
-import { getOrder } from '../../helpers/func'
+import LayoutPage from '../layouts/LayoutPage'
+import { getPlayerPoints, getPositionColor } from '../helpers/func'
+import { getOrder } from '../helpers/func'
 
 function PlayerCard({ player, onClick, className }) {
   return (
@@ -39,10 +38,14 @@ function Transfer() {
 
   const [showModel, setShowModel] = useState(false)
   const [players, setPlayers] = useState([])
-  const [screenList, setScreen] = useState([])
-  const { setIcon } = useNavbar()
-  const userState = useSelector(state => state.user.user)
   const [currentPlayer, setCurrentPlayer] = useState({})
+  const [screenList, setScreen] = useState([])
+  const [name, setName] = useState('')
+  const [position, setPosition] = useState('')
+  const [statics, setStatics] = useState('')
+  const [order, setOrder] = useState('')
+  const userState = useSelector(state => state.user.user)
+  const { setIcon } = useNavbar()
 
   function playersAdapter(align, banking) {
     const resAlign = [
@@ -54,21 +57,6 @@ function Transfer() {
 
     const playersWithouthAlign = 7 - align.length
     const playersWithouthBanking = 2 - banking.length
-
-    // if ((!playersWithouthAlign) && (!playersWithouthBanking)) {
-    //   const DELS = res.filter(p => p.position === 'DEL')
-    //   const MCS = res.filter(p => p.position === 'MC')
-    //   const DFS = res.filter(p => p.position === 'DF')
-    //   const PTS = res.filter(p => p.position === 'PT')
-    //   DELS.sort((a, b) => a.order - b.order)
-    //   MCS.sort((a, b) => a.order - b.order)
-    //   DFS.sort((a, b) => a.order - b.order)
-    //   PTS.sort((a, b) => a.order - b.order)
-    //   MCS.sort((a, b) => b.isBanking - a.isBanking)
-    //   DFS.sort((a, b) => b.isBanking - a.isBanking)
-    //   return [DELS, MCS, DFS, PTS]
-    // }
-
 
     if (playersWithouthAlign) {
       for (let i = 0; i < playersWithouthAlign; i++) {
@@ -170,13 +158,8 @@ function Transfer() {
     getPlayers()
   }, [])
 
-  const [name, setName] = useState('')
-  const [position, setPosition] = useState('')
-  const [statics, setStatics] = useState('')
-  const [order, setOrder] = useState('')
-
   function handleClickPlayerCard(filterPosition, player) {
-    return (e) => {
+    return () => {
         setPosition(filterPosition)
         setShowModel(!showModel)
         setCurrentPlayer({ ...player })
@@ -187,7 +170,7 @@ function Transfer() {
     if (showModel) setShowModel(false)
   }
 
-  const isRegister = (userState.team.align.players.length < 7 || userState.team.banking.players.length < 2)
+  const isRegister = (userState.team.players.filter(p => !p.isBanking).length < 7 || userState.team.players.filter(p => p.isBanking).length < 2)
 
   return (
     <div onClick={handleClickOnBody}>
@@ -206,7 +189,7 @@ function Transfer() {
           </div>
           <div className='absolute h-[512px] team-transfer flex flex-col justify-center items-center '>
             {
-              playersAdapter(userState.team.align.players, userState.team.banking.players).map((section, i) => {
+              playersAdapter(userState.team.players.filter(p => !p.isBanking), userState.team.players.filter(p => p.isBanking)).map((section, i) => {
                 return <div key={i} className='flex gap-4'>
                   {
                     section.map((p, j) => <PlayerCard key={j} player={p} onClick={handleClickPlayerCard(p.position, p)} />)

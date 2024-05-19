@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import HomeLastWeek from '../../components/HomeLastWeek/HomeLastWeek'
-import StatsGrid from '../../components/HomePlayerStats/PlayerStats'
-import TableCalification from '../../components/TableCalification/TableCalification'
-import LayoutPage from '../../layouts/LayoutPage'
-import { getBestFourPlayersRequest, getMoreAndLessBuyPlayersRequest } from '../../services/player'
-import { getUsersRequest } from '../../services/user'
-import useNavbar from '../../hooks/useNavbar'
+import HomeLastWeek from '../components/HomeLastWeek/HomeLastWeek'
+import StatsGrid from '../components/HomePlayerStats/PlayerStats'
+import TableCalification from '../components/TableCalification/TableCalification'
+import LayoutPage from '../layouts/LayoutPage'
+import { getBestFourPlayersRequest, getMoreAndLessBuyPlayersRequest } from '../services/player'
+import { getUsersRequest } from '../services/user'
+import useNavbar from '../hooks/useNavbar'
 
 function Home() {
 

@@ -1,5 +1,5 @@
-import FormRegister from '../../components/FormRegister/FormRegister'
-import LayoutPage from '../../layouts/LayoutPage'
+import FormRegister from '../components/FormRegister/FormRegister'
+import LayoutPage from '../layouts/LayoutPage'
 
 function Register() {
   return (

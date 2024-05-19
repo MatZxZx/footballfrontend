@@ -1,4 +1,4 @@
-import LayoutPage from '../../layouts/LayoutPage'
+import LayoutPage from '../layouts/LayoutPage'
 
 function NotFound() {
   return (

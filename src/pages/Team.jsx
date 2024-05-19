@@ -1,7 +1,7 @@
-import TeamComponent from '../../components/Team/Team'
-import LayoutPage from '../../layouts/LayoutPage'
+import TeamComponent from '../components/Team/Team'
+import LayoutPage from '../layouts/LayoutPage'
 import { useSelector } from 'react-redux'
-import useNavbar from '../../hooks/useNavbar'
+import useNavbar from '../hooks/useNavbar'
 import { useEffect } from 'react'
 function Team() {
 
