@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
-import ClipLoader from 'react-spinners/ClipLoader'
+import Loading from '../components/loading/LoadingPage'
 
 function ProtectedRoute() {
   const authState = useSelector(state => state.auth)
@@ -8,10 +8,7 @@ function ProtectedRoute() {
   if (authState.auth.isLoading)
     return (
       <div className='h-screen w-screen flex justify-center items-center'>
-        <ClipLoader
-          color='#c2dd8d'
-          size={64}
-        />
+        <Loading />
       </div>
     )
 

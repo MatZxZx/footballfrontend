@@ -1,60 +1,63 @@
-import { useState } from 'react'
 import PlayerCard from './PlayerCard'
 import { useSelector } from 'react-redux'
+import InformationCard from '../InformationCard'
+import Button from '../Button'
+import { useTeam } from '../../contexts/TeamContext'
+import Subtitle from '../Subtitle'
 
 function Team() {
 
   const userState = useSelector(state => state.user.user)
+  const { handleChange } = useTeam()
 
   function playersAdapter(players) {
-    const del = players.filter(p => p.position === 'DEL')
-    const mc = players.filter(p => p.position === 'MC')
-    const df = players.filter(p => p.position === 'DF')
-    const pt = players.filter(p => p.position === 'PT')
-    del.sort((a, b) => a.order - b.order)
-    mc.sort((a, b) => a.order - b.order)
-    df.sort((a, b) => a.order - b.order)
-    pt.sort((a, b) => a.order - b.order)
-    return [del, mc, df, pt]
+    const positions = {
+      del: [],
+      mc: [],
+      df: [],
+      pt: []
+    }
+    for (const p of players) {
+      positions[p.position.toLowerCase()].push(p) // p.position is 'DEL' or 'DF' or...
+    }
+    for (const position in positions) {
+      positions[position].sort((a, b) => a.order - b.order)
+    }
+    return [positions.del, positions.mc, positions.df, positions.pt]
   }
 
   return (
-    <div className='w-full mx-auto text-primary font-poppins flex justify-center '>
-      <div className='h-1/2 flex flex-col justify-center items-center gap-4 pl-2'>
-        <div className='w-full bg-secondary py-1 px-2 rounded-md font-poppins text-center flow-shadow-secondary'>
-          <p className='text-sm text-white font-medium'>Budget</p>
-          <p className='text-xs text-green-200'>{userState.budget}$</p>
-        </div>
-        <div className='w-full bg-secondary py-1 px-2 rounded-md font-poppins text-center flow-shadow-secondary'>
-          <p className='text-sm text-white font-medium'>Points</p>
-          <p className='text-xs text-green-200'>{1000}</p>
+    <div className='flex flex-col lg:flex-row gap-8'>
+      <div className='h-1/2 flex lg:flex-col gap-4'>
+        <InformationCard text='Puntos' data={userState.team.players.reduce((acum, p) => acum + p.points, 0)} />
+        <Button onClick={handleChange}>
+          Guardar
+        </Button>
+      </div>
+      <div className='w-full flex flex-col gap-4'>
+        <Subtitle>Campo</Subtitle>
+        <div className='w-full relative flex justify-center items-center'>
+          <div className='football-field flex flex-col justify-center items-center gap-2'>
+            {
+              playersAdapter(userState.team.players.filter(p => !p.isBanking), userState.team.players.filter(p => p.isBanking)).map((section, i) => {
+                return <div key={i} className='flex gap-8'>
+                  {
+                    section.map((p, j) => <PlayerCard key={j} player={p} />)
+                  }
+                </div>
+              })
+            }
+          </div>
         </div>
       </div>
-      <div className='flex flex-col justify-center items-center'>
-        <h2 className='text-2xl font-bold mb-2'>Campo</h2>
-        <div className='campo-de-fulbo flex flex-col justify-center items-center'>
-          {
-            playersAdapter(userState.team.align.players).map((s, i) => {
-              return <div key={i} className='flex'>
-                {
-                  s.map((p, j) => {
-                    return <PlayerCard key={`${p.name + ' ' + p.lastname}`} player={p} />
-                  })
-                }
-              </div>
-            })
-          }
-          <div className='w-full h-28'></div>
-        </div>
+      <div className='w-full flex lg:w-auto lg:flex-col justify-center items-center gap-8'>
+        <Subtitle>Banca</Subtitle>
+        {
+          userState.team.players.filter(p => p.isBanking).toSorted((a, b) => a.order - b.order).map((p, i) => {
+            return <PlayerCard key={i} player={p} onBanking={true} />
+          })
+        }
       </div>
-      <div className='flex flex-col items-center gap-2'>
-          <h2 className='text-xl font-semibold'>Banca</h2>
-          {
-            userState.team.banking.players.toSorted((a, b) => a.order - b.order).map((p, i) => {
-              return <PlayerCard key={`${p.name + ' ' + p.lastname}`} player={p} onBanking={true} />
-            })
-          }
-        </div>
     </div>
   )
 }

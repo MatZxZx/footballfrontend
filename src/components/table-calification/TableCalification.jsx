@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
-import PlayerListed from '../HomePlayerListed/PlayerListed'
+import PlayerListed from '../home/PlayerListed'
 import { getPlayerPoints } from '../../helpers/func'
-import './tabla.css'
 import GridLoader from 'react-spinners/GridLoader'
+import './tabla.css'
 
 function TableCalification({ users }) {
 
@@ -11,11 +11,10 @@ function TableCalification({ users }) {
 
   useEffect(() => {
     const formatUser = users.map((u, i) => {
-      const pointsAlign = u.team.align.players.reduce((acum, p) => acum + getPlayerPoints(p), 0)
-      const pointsBanking = u.team.banking.players.reduce((acum, p) => acum + getPlayerPoints(p), 0)
+      const points = u.team.players.reduce((acum, p) => acum + getPlayerPoints(p), 0)
       return {
         ...u,
-        points: pointsAlign + pointsBanking
+        points
       }
     })
     formatUser.sort((a, b) => b.points - a.points)
@@ -32,7 +31,7 @@ function TableCalification({ users }) {
   return (
     <div className='min-h-max max-h-60 flow-shadow-primary rounded-md bg-card hidden-conten-tabla px-4 py-2'>
       {
-        showUsers.map(user => <PlayerListed key={user.id} user={user} />)
+        showUsers.map((user, i) => <PlayerListed key={i} user={user} />)
       }
     </div>
   )

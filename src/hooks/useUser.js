@@ -1,48 +1,67 @@
 import { useDispatch } from 'react-redux'
-import { changeUser, addPlayerToAlign, addPlayerToBanking, editPlayerAlignToAlign, editPlayerBankingToBanking, editPlayerAlignToBaknig, addPlayerToChangeBanking, changeChangeBankingProgress, removePlayersChangeBanking, changePlayersAlignToBanking, changePlayersAlignToAling, removePlayerTeamById, changePlayerBankingIsSelected, changePlayerAlignIsSelected, changeChangeAlignProgress, addPlayerToChangeAlign, removePlayersChangeAlign, changePlayersBankingToBanking, changeBudget } from '../redux/features/user/userSlice'
+import {
+  changeUser,
+  changeBudget,
+  changeTransfers,
+  changeCompleteTeam,
+  // Transfer
+  addPlayerToTeam,
+  removePlayerToTeam,
+  // Change
+  changeChangeAlignProgress,
+  changeChangeBankingProgress,
+  addPlayerToChangeAlign,
+  addPlayerToChangeBanking,
+  removePlayersChangeAlign,
+  removePlayersChangeBanking,
+  changePlayerAlignIsSelected,
+  changePlayerBankingIsSelected,
+  changePlayersAlignToAling,
+  changePlayersBankingToBanking,
+  changePlayersAlignToBanking
+} from '../redux/features/user/userSlice'
 
 function useUser() {
+  
   const dispatch = useDispatch()
-
+  
   function setUser(user) {
     dispatch(changeUser({
       user
     }))
   }
 
-  function addPlayerAlign(player) {
-    dispatch(addPlayerToAlign({
+  function setBudget(value) {
+    dispatch(changeBudget({
+      value
+    }))
+  }
+
+  function setTransfers(value) {
+    dispatch(changeTransfers({
+      value
+    }))
+  }
+
+  function setCompleteTeam(value) {
+    dispatch(changeCompleteTeam({
+      value
+    }))
+  }
+
+  function addPlayer(player) {
+    dispatch(addPlayerToTeam({
       player
     }))
   }
 
-  function addPlayerBanking(player) {
-    dispatch(addPlayerToBanking({
+  function removePlayer(player) {
+    dispatch(removePlayerToTeam({
       player
     }))
   }
 
-  function editPlayerAlignAlign(playerA, playerB) {
-    dispatch(editPlayerAlignToAlign({
-      playerA,
-      playerB
-    }))
-  }
-
-  function editPlayerBankingBanking(playerA, playerB) {
-    dispatch(editPlayerBankingToBanking({
-      playerA,
-      playerB
-    }))
-  }
-
-  function editPlayerAlignBanking(playerAlign, playerBanking) {
-    dispatch(editPlayerAlignToBaknig({
-      playerAlign,
-      playerBanking
-    }))
-  }
-
+  // Change
   function setProgressChangeBanking(value) {
     dispatch(changeChangeBankingProgress({
       value
@@ -80,14 +99,7 @@ function useUser() {
     }))
   }
 
-  function deletePlayerOnTeamById(playerId) {
-    dispatch(removePlayerTeamById({
-      playerId
-    }))
-  }
-  
-
-  function setPlayerIsSelecetd({ playerId, value }) {
+  function setPlayerBankingIsSelecetd({ playerId, value }) {
     dispatch(changePlayerBankingIsSelected({
       playerId,
       value
@@ -119,40 +131,26 @@ function useUser() {
     }))
   }
 
-  function setBudget(value) {
-    dispatch(changeBudget({
-      value
-    }))
-  }
-
   return {
     setUser,
     setBudget,
-    addPlayerAlign,
-    addPlayerBanking,
-    editPlayerAlignAlign,
-    editPlayerBankingBanking,
-    editPlayerAlignBanking,
-
-    // Align
+    setTransfers,
+    setCompleteTeam,
+    // Transfer
+    addPlayer,
+    removePlayer,
+    // Change
     setProgressChangeAlign,
-    addPlayerChangeAlign,
-    resetPlayersChangeAlign,
-
-    // Banking
     setProgressChangeBanking,
+    addPlayerChangeAlign,
     addPlayerChangeBanking,
+    resetPlayersChangeAlign,
     resetPlayersChangeBanking,
-    setPlayersBankingBanking,
-
-    setPlayersAlignBanking,
     setPlayersAlignAlign,
-
-    deletePlayerOnTeamById,
-
-    // Players
-    setPlayerIsSelecetd,
-    setPlayerAlignIsSelecetd
+    setPlayersBankingBanking,
+    setPlayersAlignBanking,
+    setPlayerAlignIsSelecetd,
+    setPlayerBankingIsSelecetd
   }
 }
 

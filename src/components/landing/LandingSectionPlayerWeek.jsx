@@ -1,52 +1,67 @@
-import avatar from '../../assets/avatar-one.png'
-import Button from '../ButtonAuth/Button'
-import { useNavigate } from 'react-router-dom'
 import { getWidthByPoints } from '../../helpers/func'
+import { useEffect, useState } from 'react'
+import service from '../../services/service'
+import Subtitle from '../Subtitle'
+import Loading from '../loading/LoadingPage'
+import ApiMessage from '../ApiMessage'
 import './landing-section-player-week.css'
 
-function PointsBar({ amountPoints, img }) {
-
-  const width = getWidthByPoints(amountPoints)
-
+function PointsBar({ player }) {
+  const width = getWidthByPoints(20)
   return (
-    <div className='flex gap-3 items-center'>
-      <div style={{
-        width
-      }} className='landing-section-points-bar'>
-      </div>
+    <div className='flex justify-center items-end gap-4'>
       <div>
-        <p className='text-[0.7rem] text-white font-bold'>{ amountPoints } pts</p>
-        <p className='text-[0.7rem] text-white font-bold'>Ultima</p>
-        <p className='text-[0.7rem] text-white font-bold'>semana</p>
+        <img className='w-14 h-w-14 object-cover rounded-xl' src={`${service.getURL()}/${player.photo}`} alt={player.name} />
       </div>
-      <div>
-        <img className='landing-section-points-bar-avatar' src={img ? img : avatar} alt="" />
+      <div className='w-4/6 max-w-[512px] h-8 landing-section-points-bar rounded-sm flex items-center px-4'>
+        <p className='text-black font-bold'>{player.points} Puntos</p>
       </div>
-    </div>  
+    </div>
   )
 }
 
 function LandingSectionPlayerWeek() {
 
-  const navigate = useNavigate()
+  const [players, setPlayers] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    async function getPlayersRequest() {
+      setIsLoading(true)
+      try {
+        const res = await service.getPlayersRequest()
+        const p = res.data.data
+        p.sort((a, b) => a.points - b.points)
+        setPlayers(p.splice(0, 3))
+      } catch (e) {
+        setMessage(e.response.data.message)
+      }
+      setIsLoading(false)
+    }
+    getPlayersRequest()
+  }, [])
 
   return (
-    <div className='w-full flex justify-between items-center'>
-      <div className='w-1/2'>
-        <h2 className='text-xl text-primary font-poppins font-bold mb-8'>Lo mejores jugadores de la semana</h2>
-        <div className='flex flex-col gap-4'>
-          <PointsBar amountPoints={18} />
-          <PointsBar amountPoints={13} />
-          <PointsBar amountPoints={8} />
+    <div className='w-full text-primary text-xs'>
+      <Subtitle variant='italic'>Mejores de la semana</Subtitle>
+      <div className={`flex flex-col lg:flex-row mt-4`}>
+        <div className='w-full'>
+          {
+            isLoading
+              ? <Loading />
+              : message !== ''
+                ? <ApiMessage>{message}</ApiMessage>
+                : <div className='flex flex-col h-full'>
+                  {
+                    players.map((p, i) => <PointsBar key={i} player={p} />)
+                  }
+                </div>
+          }
         </div>
-      </div>
-      <div className='w-1/2 flex flex-col gap-4'>
-        <p className='text-base text-center text-primary font-poppins font-medium'>El rendimiento de los jugadores son puntos</p>
-        <p className='text-base text-center text-primary font-poppins font-medium'>Elige bien a tus jugadores para llegar a la cima de la clasificacion con tu equipo</p>
-        <div className='mx-auto w-[252px] mt-4'>
-          <Button className='log' onClick={() => navigate('/home')}>
-            Crear tu equipo
-          </Button>
+        <div className={`w-full max-w-[512px] mx-auto lg:w-3/4 flex flex-col justify-center items-center text-center gap-2`}>
+          <p>El rendimiento de los jugadores son puntos</p>
+          <p>Elige bien a tus jugadores para llegar a la cima de la clasificacion con tu equipo</p>
         </div>
       </div>
     </div>

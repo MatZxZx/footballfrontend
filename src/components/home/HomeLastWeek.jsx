@@ -1,6 +1,6 @@
-import { useEffect } from "react"
 import { getPositionColor } from "../../helpers/func"
 import GridLoader from 'react-spinners/GridLoader'
+import PlayerValoration from '../player/PlayerValoration'
 
 function ArrowStatusUp() {
   return (
@@ -15,28 +15,6 @@ function ArrowStatusDown() {
     <div className="text-3xl bg-gradient-to-t from-[#c0392b] to-[#e67e22] bg-clip-text text-transparent">
       <i className="fa-solid fa-arrow-down"></i>
     </div>
-  )
-}
-
-function StarsPlayer({ valorations }) {
-
-  const stars = []
-
-  for (let i = 0; i < 5; i++) {
-    if (i < valorations) {
-      stars.push(<i key={i} className="fa-solid fa-star text-focus"></i>)
-    } else {
-      stars.push(<i key={i} className="fa-solid fa-star"></i>)
-    }
-  }
-
-  return (
-    <div className="flex items-center gap-1 text-sm">
-      {
-        stars
-      }
-    </div>
-
   )
 }
 
@@ -58,7 +36,7 @@ function CardHomeLastWeek({ player, status }) {
             <div className="w-[1px] h-full bg-white"></div>
             <p>{player.timesBought}<span className="text-focus"> Bought</span></p>
           </div>
-          <StarsPlayer valorations={player.valortions} />
+          <PlayerValoration valoration={player.valortions} />
         </div>
       </div>
       {
@@ -68,25 +46,24 @@ function CardHomeLastWeek({ player, status }) {
   )
 }
 
-function HomeLastWeek({ more, less, isLoading }) {
+function HomeLastWeek({ players, message, isLoading }) {
 
-  // if (isLoading) {
-  //   return <div className="w-full h-48 flex justify-center items-center bg-card rounded-md mb-12 flow-shadow-secondary">
-  //     <p className="text-primary font-poppins font-medium">No se encotraron jugadores</p>
-  //   </div>
-  // }
-
-  if ((!more) || (!less))
+  if (isLoading)
     return (
       <div className="w-full h-48 flex justify-center items-center bg-card rounded-md mb-12 flow-shadow-secondary">
         <GridLoader color="#C2DD8D" />
       </div>
     )
 
+  if ((message !== '') || (!players.length))
+    return <div className="w-full h-48 flex justify-center items-center bg-card rounded-md mb-12 flow-shadow-secondary">
+      <p className="text-primary">{message}</p>
+    </div>
+
   return (
     <div className="w-full h-48 flex flex-col gap-4 mb-12">
-      <CardHomeLastWeek player={more} status />
-      <CardHomeLastWeek player={less} />
+      <CardHomeLastWeek player={players[0]} status />
+      <CardHomeLastWeek player={players[players.length - 1]} />
     </div>
   )
 }

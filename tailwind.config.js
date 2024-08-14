@@ -20,6 +20,9 @@ export default {
         secondary: '#247855',
         error: '#B81212',
         card: '#181818'
+      },
+      fontSize: {
+        xxs: '0.6rem'
       }
     },
   },

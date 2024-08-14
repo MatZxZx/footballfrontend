@@ -1,13 +1,6 @@
 .landing-section-points-bar {
-    height: 64px;
     background-image: linear-gradient(to right,
         #C2DD8D,
         #58C6CD
     );
-    border-radius: 12px;
-}
-
-.landing-section-points-bar-avatar {
-    width: 72px;
-    height: 72px;
 }

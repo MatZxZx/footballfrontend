@@ -1,12 +1,8 @@
-
 function LayoutLanding({ children }) {
   return (
-    <div className="flex">
-      <div className='min-w-[1536px] max-w-[1536px] mx-auto pt-24 flex justify-center items-center'>
-        {children}
-      </div>
+    <div className='w-full px-2 sm:max-w-[1024px] sm:mx-auto lg:mt-6'>
+      {children}
     </div>
-    
   )
 }
 

@@ -1,17 +1,16 @@
-import FormLogin from "../FormLogin/FormLogin"
+import Title from '../Title'
+import FormLogin from '../form/Login'
 
 function LandingSectionHeader() {
   return (
-    <div className='w-full flex flex-col sm:flex-row justify-between'>
-      <div className='w-1/2 flex flex-col gap-3 items-start justify-center'>
-        <p className='text-xl text-primary font-poppins font-semibold'>Bienvenido a</p>
-        <h1 className="text-6xl text-center font-black bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent">FOOTBALLFATE</h1>
-        <p className='text-sm pl-2 text-primary font-poppins italic'>Crea tu Equipo, Analiza, Compite y Gana</p>
+    <div className={`w-full flex flex-col justify-between gap-6 pt-12 lg:flex-row`}>
+      <div className={`text-primary text-center lg:w-full lg:flex lg:flex-col lg:justify-center lg:items-center`}>
+        <p className={`font-semibold`}>Bienvenido a</p>
+        <Title>FOOTBALLFATE</Title>
+        <p className={`text-xs font-light italic`}>Crea tu Equipo, Analiza, Compite y Gana</p>
       </div>
-      <div className='w-1/2 flex justify-center items-center'>
-        <div className=''>
-          <FormLogin />
-        </div>
+      <div className={`lg:w-full`}>
+        <FormLogin />
       </div>
     </div>
   )

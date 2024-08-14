@@ -1,50 +1,19 @@
-import { useEffect, useState } from 'react'
-import ScrollFilter from '../components/ScrollFilter/ScrollFilter'
-import { getPlayersRequest } from '../services/player'
-import useNavbar from '../hooks/useNavbar'
-import { useSelector } from 'react-redux'
-import LayoutPage from '../layouts/LayoutPage'
-import { getPlayerPoints, getPositionColor } from '../helpers/func'
+import { useEffect } from 'react'
+import ScrollFilter from '../components/scroll-filter/ScrollFilter'
 import { getOrder } from '../helpers/func'
-
-function PlayerCard({ player, onClick, className }) {
-  return (
-    player.isEmpty
-      ? <PlayerEmptyCard className={className} player={player} onClick={onClick} />
-      : <PlayerNoEmptyCard className={className} player={player} onClick={onClick} />
-  )
-}
-
-function PlayerEmptyCard({ player, onClick, className }) {
-  return <div className={`relative min-w-[126px] max-w-[126px] h-[126px] flex flex-col justify-center items-center text-white py-2 hover:scale-150 transition-all duration-300 cursor-pointer ${className} ${player.position === 'PT' ? 'mb-12' : ''}`} onClick={onClick}>
-    <img className='w-12 player-empty' src="/src/assets/shirt.png" alt={player.name} />
-    <div className='bg-[#161616] px-2 py-0.5 rounded-sm absolute bottom-2'>
-      <p className='text-xs'>Vacio</p>
-    </div>
-  </div>
-}
-
-function PlayerNoEmptyCard({ player, onClick, className }) {
-  return <div className={`relative min-w-[126px] max-w-[126px] h-[126px] flex flex-col items-center justify-center text-center ${className} ${player.position === 'PT' ? 'mb-12' : ''}`} onClick={onClick}>
-    <img className='w-12' src="/src/assets/shirt.png" alt={player.name} />
-    <div className='flex flex-col gap-0.5 absolute -bottom-2'>
-      <p style={{ color: getPositionColor(player.position) }} className='text-xs font-poppins font-semibold bg-[#202020] px-2 py-0.5 rounded-sm'>{player.name}</p>
-      <p className='text-secondary text-[.6rem] font-poppins font-semibold bg-[#202020] px-2 py-0.5 rounded-sm'>{getPlayerPoints(player)} PTS</p>
-    </div>
-  </div>
-}
+import LayoutPage from '../layouts/LayoutPage'
+import { useSelector } from 'react-redux'
+import useNavbar from '../hooks/useNavbar'
+import PlayerCardTrasfer from '../components/player/PlayerCardTrasfer'
+import { useTransfer } from '../contexts/TransferContext'
+import InformationCard from '../components/InformationCard'
+import Button from '../components/Button'
+import LoadingPageTransparent from '../components/loading/LoadingPageTransparent'
 
 function Transfer() {
 
-  const [showModel, setShowModel] = useState(false)
-  const [players, setPlayers] = useState([])
-  const [currentPlayer, setCurrentPlayer] = useState({})
-  const [screenList, setScreen] = useState([])
-  const [name, setName] = useState('')
-  const [position, setPosition] = useState('')
-  const [statics, setStatics] = useState('')
-  const [order, setOrder] = useState('')
   const userState = useSelector(state => state.user.user)
+  const { showModel, setShowModel, handleTransfer, transferIsLoading } = useTransfer()
   const { setIcon } = useNavbar()
 
   function playersAdapter(align, banking) {
@@ -64,7 +33,7 @@ function Transfer() {
         const MCS = resAlign.filter(p => p.position === 'MC')
         const DFS = resAlign.filter(p => p.position === 'DF')
         const PTS = resAlign.filter(p => p.position === 'PT')
-                
+
         let position
         let orderOnPosition
 
@@ -83,7 +52,7 @@ function Transfer() {
         } else {
           throw new Error('me mori en alineacion')
         }
-  
+
         resAlign.push({
           id: 0,
           isEmpty: true,
@@ -95,7 +64,7 @@ function Transfer() {
     }
 
     if (playersWithouthBanking) {
-      for (let i = 0; i < playersWithouthBanking; i++) {  
+      for (let i = 0; i < playersWithouthBanking; i++) {
         const MCS = resBanking.filter(p => p.position === 'MC')
         const DFS = resBanking.filter(p => p.position === 'DF')
         let order
@@ -131,7 +100,7 @@ function Transfer() {
         })
       }
     }
-    
+
     const res = [...resAlign, ...resBanking]
     const DELS = res.filter(p => p.position === 'DEL')
     const MCS = res.filter(p => p.position === 'MC')
@@ -148,62 +117,59 @@ function Transfer() {
 
   useEffect(() => {
     setIcon('transfer')
-    async function getPlayers() {
-      const res = await getPlayersRequest()
-      if (res.status === 200) {
-        setPlayers(res.data)
-        setScreen(res.data)
-      }
-    }
-    getPlayers()
   }, [])
-
-  function handleClickPlayerCard(filterPosition, player) {
-    return () => {
-        setPosition(filterPosition)
-        setShowModel(!showModel)
-        setCurrentPlayer({ ...player })
-    }
-  }
 
   function handleClickOnBody(e) {
     if (showModel) setShowModel(false)
   }
 
-  const isRegister = (userState.team.players.filter(p => !p.isBanking).length < 7 || userState.team.players.filter(p => p.isBanking).length < 2)
+  const teamComplete = userState.team.players.length === 9
 
   return (
-    <div onClick={handleClickOnBody}>
-      <LayoutPage>
-        {
-          isRegister
-            ? <p className='text-white text-center animate__animated animate__fadeInDown'>Ficha los jugadores tocando los espacios vacios</p>
-            : <></>
-        }
-        <div className='w-full h-[768px] relative flex justify-center items-center overflow-hidden pb-12'>
-          <div className='absolute z-50 top-0 left-0 mt-12 ml-6'>
-            <div className='bg-secondary py-1 px-4 rounded-md font-poppins text-center flow-shadow-secondary'>
-              <p className='text-white font-medium'>Budget</p>
-              <p className='text-xs text-green-200'>{userState.budget}$</p>
+    <>
+      {
+        transferIsLoading
+          ? <LoadingPageTransparent />
+          : <></>
+      }
+      <div onClick={handleClickOnBody}>
+
+        <LayoutPage>
+          <div className='flex flex-col lg:flex-row gap-12 overflow-hidden'>
+            <div className='flex justify-center gap-4 lg:flex-col lg:justify-normal'>
+              <InformationCard text='Presupuesto' data={`${userState.budget}$`} />
+              <InformationCard text='Transferencias' data={userState.willCardActive ? '∞' : userState.transfers} />
+              <Button onClick={handleTransfer} hidden={!(userState.team.players.length === 9)}>
+                Guardar
+              </Button>
             </div>
-          </div>
-          <div className='absolute h-[512px] team-transfer flex flex-col justify-center items-center '>
-            {
-              playersAdapter(userState.team.players.filter(p => !p.isBanking), userState.team.players.filter(p => p.isBanking)).map((section, i) => {
-                return <div key={i} className='flex gap-4'>
+            <div className='w-full'>
+              {
+                !teamComplete
+                  ? <p className='text-center animate__animated animate__fadeInDown mb-6'>Ficha jugadores tocando los espacios vacios</p>
+                  : <></>
+              }
+              <div className='w-full relative flex justify-center items-center'>
+                <div className='football-field  flex flex-col justify-center items-center lg:gap-8'>
                   {
-                    section.map((p, j) => <PlayerCard key={j} player={p} onClick={handleClickPlayerCard(p.position, p)} />)
+                    playersAdapter(userState.team.players.filter(p => !p.isBanking), userState.team.players.filter(p => p.isBanking)).map((section, i) => {
+                      return <div key={i} className='flex gap-4'>
+                        {
+                          section.map((p, j) => <PlayerCardTrasfer key={j} player={p} />)
+                        }
+                      </div>
+                    })
                   }
                 </div>
-              })
-            }
+                <div className={`w-full transfer__model right-0 ${showModel ? 'transfer__model-active' : ''} p-4`}>
+                  <ScrollFilter />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className={`transfer__model w-4/6 right-0 ${showModel ? 'transfer__model-active' : ''}`}>
-            <ScrollFilter currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer} setShowModel={setShowModel} players={players} name={name} setName={setName} order={order} position={position} screenList={screenList} setOrder={setOrder} setPosition={setPosition} setScreen={setScreen} setStatics={setStatics} statics={statics} />
-          </div>
-        </div>
-      </LayoutPage>
-    </div>
+        </LayoutPage>
+      </div>
+    </>
   )
 }
 

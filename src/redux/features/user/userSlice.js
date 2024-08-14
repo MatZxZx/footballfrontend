@@ -1,18 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getOrder } from '../../../helpers/func'
 
+function getAlign(state) {
+  return state.user.team.players.filter(p => !p.isBanking)
+}
+
+function getBanking(state) {
+  return state.user.team.players.filter(p => p.isBanking)
+}
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: {
       team: {
-        align: {
-          players: []
-        },
-        banking: {
-          players: []
-        }
-      }
+        teamname: '',
+        players: []
+      },
+      completeTeam: false
     },
     changeBanking: {
       progress: false,
@@ -30,87 +35,57 @@ export const userSlice = createSlice({
     changeBudget: (state, action) => {
       state.user.budget = action.payload.value
     },
-    addPlayerToAlign: (state, action) => {
-      state.user.team.align.players = [...state.user.team.align.players, action.payload.player]
-      // state.user.budget -= action.payload.player.price
+    changeTransfers: (state, action) => {
+      state.user.transfers = action.payload.value
     },
-    addPlayerToBanking: (state, action) => {
-      state.user.team.banking.players = [...state.user.team.banking.players, action.payload.player]
-      // state.user.budget -= action.payload.player.price
+    changeCompleteTeam: (state, action) => {
+      state.user.completeTeam = action.payload.value
     },
-    editPlayerAlignToAlign: (state, action) => {
-      // state.user.team.banking.players = [...state.user.team.banking.players, action.payload.player]
+    // Transfer
+    addPlayerToTeam: (state, action) => {
+      state.user.team.players.push(action.payload.player)
     },
-    editPlayerBankingToBanking: (state, action) => {
-      // state.user.team.banking.players = [...state.user.team.banking.players, action.payload.player]
+    removePlayerToTeam: (state, action) => {
+      state.user.team.players = state.user.team.players.filter(p => p.id !== action.payload.player.id)
     },
-    editPlayerAlignToBaknig: (state, action) => {
-      // state.user.team.banking.players = [...state.user.team.banking.players, action.payload.player]
+    // Change
+    changeChangeAlignProgress: (state, action) => {
+      state.changeAlign.progress = action.payload.value
     },
-
-    // ChangeBanking
     changeChangeBankingProgress: (state, action) => {
       state.changeBanking.progress = action.payload.value
     },
-    addPlayerToChangeBanking: (state, action) => {
-      state.changeBanking.players = [...state.changeBanking.players, action.payload.player]
+    addPlayerToChangeAlign: (state, action) => {
+      state.changeAlign.players.push(action.payload.player)
     },
-    removePlayersChangeBanking: (state, action) => {
-      state.changeBanking.players = []
+    addPlayerToChangeBanking: (state, action) => {
+      state.changeBanking.players.push(action.payload.player)
     },
     removePlayersChangeAlign: (state, action) => {
       state.changeAlign.players = []
     },
-    changePlayersAlignToBanking: (state, action) => {
-      const playerOnAlign = action.payload.playerOnAlign
-      const playerOnBanking = action.payload.playerOnBanking
-      const newAlign = state.user.team.align.players.filter(p => p.id !== playerOnAlign.id)
-      const newBanking = state.user.team.banking.players.filter(p => p.id !== playerOnBanking.id)
-      if (playerOnAlign.position === playerOnBanking.position) {
-        newAlign.push({ ...playerOnBanking, order: playerOnAlign.order })
-      } else {
-        const order = getOrder(state.user.team.align.players.filter(p => p.position === playerOnAlign.position))
-        newAlign.push({ ...playerOnBanking, order })
-      }
-      newBanking.push({ ...playerOnAlign, order: playerOnBanking.order})
-      state.user.team.align.players = newAlign
-      state.user.team.banking.players = newBanking
-    },
-    removePlayerTeamById: (state, action) => {
-      const id = action.payload.playerId
-      const newAlign = state.user.team.align.players.filter(p => p.id !== id)
-      const newBanking = state.user.team.banking.players.filter(p => p.id !== id)
-      state.user.team.align.players = newAlign
-      state.user.team.banking.players = newBanking
+    removePlayersChangeBanking: (state, action) => {
+      state.changeBanking.players = []
     },
     changePlayerBankingIsSelected: (state, action) => {
       const id = action.payload.playerId
-      const playerFound = state.user.team.banking.players.find(p => p.id === id)
+      const playerFound = getBanking(state).find(p => p.id === id)
       playerFound.isSelected = action.payload.value
     },
-
-    // Align
     changePlayerAlignIsSelected: (state, action) => {
       const id = action.payload.playerId
-      const playerFound = state.user.team.align.players.find(p => p.id === id)
-      const playersToInactive = state.user.team.align.players.filter(p => p.position !== playerFound.position)
+      const playerFound = getAlign(state).find(p => p.id === id)
+      const playersToInactive = getAlign(state).filter(p => p.position !== playerFound.position)
       playerFound.isSelected = action.payload.value
       playersToInactive.forEach(p => {
         p.isInactive = action.payload.value
       })
     },
-
-    changeChangeAlignProgress: (state, action) => {
-      state.changeAlign.progress = action.payload.value
-    },
-    addPlayerToChangeAlign: (state, action) => {
-      state.changeAlign.players.push(action.payload.player)
-    },
     changePlayersAlignToAling: (state, action) => {
       const playerA = action.payload.playerA
       const playerB = action.payload.playerB
-      const aRef = state.user.team.align.players.find(p => p.id === playerA.id)
-      const bRef = state.user.team.align.players.find(p => p.id === playerB.id)
+      const aRef = getAlign(state).find(p => p.id === playerA.id)
+      const bRef = getAlign(state).find(p => p.id === playerB.id)
       let aux = aRef.order
       aRef.order = bRef.order
       bRef.order = aux
@@ -118,43 +93,54 @@ export const userSlice = createSlice({
     changePlayersBankingToBanking: (state, action) => {
       const playerA = action.payload.playerA
       const playerB = action.payload.playerB
-      const aRef = state.user.team.banking.players.find(p => p.id === playerA.id)
-      const bRef = state.user.team.banking.players.find(p => p.id === playerB.id)
+      const aRef = getBanking(state).find(p => p.id === playerA.id)
+      const bRef = getBanking(state).find(p => p.id === playerB.id)
       let aux = aRef.order
       aRef.order = bRef.order
       bRef.order = aux
     },
+    changePlayersAlignToBanking: (state, action) => {
+      const playerOnAlign = action.payload.playerOnAlign
+      const playerOnBanking = action.payload.playerOnBanking
+      const alignRef = getAlign(state).find(p => p.id === playerOnAlign.id)
+      const bankingRef = getBanking(state).find(p => p.id === playerOnBanking.id)
+      if (playerOnAlign.position === playerOnBanking.position) {
+        const aux = bankingRef.order
+        bankingRef.order = alignRef.order 
+        alignRef.order = aux
+        bankingRef.isBanking = false
+        alignRef.isBanking = true
+      } else {
+        const order = getOrder(getAlign(state).filter(p => p.position === playerOnAlign.position))
+        alignRef.order = bankingRef.order
+        bankingRef.order = order 
+        bankingRef.isBanking = false
+        alignRef.isBanking = true
+      }
+    }
   }
 })
 
 export const {
   changeUser,
   changeBudget,
-  addPlayerToAlign,
-  addPlayerToBanking,
-  editPlayerAlignToAlign,
-  editPlayerBankingToBanking,
-  editPlayerAlignToBaknig,
-
-  // Align
+  changeTransfers,
+  changeCompleteTeam,
+  // Trasfer
+  addPlayerToTeam,
+  removePlayerToTeam,
+  // Change
   changeChangeAlignProgress,
-  addPlayerToChangeAlign,
-  removePlayersChangeAlign,
-  changePlayersAlignToAling,
-
-  // Banking
   changeChangeBankingProgress,
+  addPlayerToChangeAlign,
   addPlayerToChangeBanking,
+  removePlayersChangeAlign,
   removePlayersChangeBanking,
-  changePlayersBankingToBanking,
-
-  changePlayersAlignToBanking,
-
-  removePlayerTeamById,
-
-  // Players
+  changePlayerAlignIsSelected,
   changePlayerBankingIsSelected,
-  changePlayerAlignIsSelected
+  changePlayersAlignToAling,
+  changePlayersBankingToBanking,
+  changePlayersAlignToBanking,
 } = userSlice.actions
 
 export default userSlice.reducer

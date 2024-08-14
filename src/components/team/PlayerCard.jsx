@@ -1,4 +1,4 @@
-import { getPlayerPoints, getPositionColor } from '../../helpers/func'
+import { getPlayerPoints, getPositionColor, toCapitalaze } from '../../helpers/func'
 import { notify, errorNotify } from '../../hooks/useNoty'
 import { useSelector } from 'react-redux'
 import useUser from '../../hooks/useUser'
@@ -12,7 +12,7 @@ function PlayerCard({ player, onBanking }) {
     addPlayerChangeBanking,
     resetPlayersChangeBanking,
     setPlayersAlignBanking,
-    setPlayerIsSelecetd,
+    setPlayerBankingIsSelecetd,
     setPlayerAlignIsSelecetd,
     setPlayersBankingBanking,
 
@@ -24,14 +24,14 @@ function PlayerCard({ player, onBanking }) {
   } = useUser()
 
   function canWithout(player) {
-    return userState.user.team.align.players.filter(p => p.position === player.position).length > 1
+    return userState.user.team.players.filter(p => (!p.isBanking) && p.position === player.position).length > 1
   }
 
   function handleClickOnField() {
     if (userState.changeBanking.progress) {
       const p1 = userState.changeBanking.players[0]
       const p2 = player
-      setPlayerIsSelecetd({ playerId: p1.id, value: false })
+      setPlayerBankingIsSelecetd({ playerId: p1.id, value: false })
       if (canWithout(p2) || p1.position === p2.position) {
         setPlayersAlignBanking({ playerOnBanking: p1, playerOnAlign: p2 })
         notify(`${p1.name} -> ${p2.name}`)
@@ -69,7 +69,7 @@ function PlayerCard({ player, onBanking }) {
       if (p1.id !== p2.id) {
         notify(`${p1.name} -> ${p2.name}`)
       }
-      setPlayerIsSelecetd({ playerId: p1.id, value: false })
+      setPlayerBankingIsSelecetd({ playerId: p1.id, value: false })
       setPlayersBankingBanking(p1, p2)
       setProgressChangeBanking(false)
       resetPlayersChangeBanking()
@@ -89,26 +89,26 @@ function PlayerCard({ player, onBanking }) {
     } else if (!userState.changeAlign.progress) {
       addPlayerChangeBanking(player)
       setProgressChangeBanking(true)
-      setPlayerIsSelecetd({ playerId: player.id, value: true })
+      setPlayerBankingIsSelecetd({ playerId: player.id, value: true })
     }
   }
 
-  let classNameContainer = 'min-w-[126px] max-w-[126px] h-[116px] flex flex-col items-center justify-center text-center relative'
-  let classNameP = `w-full block text-[0.70rem] font-poppins font-semibold bg-[#202020] mb-0.5 px-2 rounded-sm`
-  let classNamePPoints = `w-full block text-[0.50rem] text-white bg-[#202020] font-poppins font-semibold rounded-sm`
+  let classNameContainer = 'flex flex-col items-center justify-center text-center relative'
+  let classNameP = `w-full block font-semibold bg-[#202020] mb-0.5 px-2 rounded-sm`
+  let classNamePPoints = `w-full block text-white bg-[#202020] font-semibold rounded-sm`
 
   if (player.isSelected) {
-    classNameContainer = `${classNameContainer} scale-125 selected-player-${player.position.toLowerCase()}`
+    classNameContainer = `${classNameContainer} scale-125 selected-player-${player.position.toLowerCase()} z-[1]`
   } else if (player.isInactive) {
     classNameContainer = `${classNameContainer} brightness-[.3]`
   } else {
-    classNameContainer = `${classNameContainer} cursor-pointer hover:scale-125 transition-all brightness-[1.1]`
+    classNameContainer = `${classNameContainer} cursor-pointer hover:scale-125 hover:z-[1] transition-all brightness-[1.1]`
   }
 
   return <div className={classNameContainer} onClick={onBanking ? handleClickOnBanking : handleClickOnField}>
-    <img className='w-12' src="/src/assets/shirt.png" alt={player.name} />
-    <div className='absolute bottom-0'>
-      <p style={{ color: getPositionColor(player.position) }} className={classNameP}>{player.name}</p>
+    <img className='w-8' src="/src/assets/shirt.png" alt={player.name} />
+    <div className='bottom-0 text-xs'>
+      <p style={{ color: getPositionColor(player.position) }} className={classNameP}>{toCapitalaze(player.name)}</p>
       <span className={classNamePPoints}>{getPlayerPoints(player)} PTS</span>
     </div>
   </div>

@@ -1,5 +1,5 @@
 export function getWidthByPoints(points) {
-  return points > 20 ? 512 : 512 / 20 * points 
+  return points > 20 ? 512 : 512 / 20 * points
 }
 
 export function getPositionColor(position) {

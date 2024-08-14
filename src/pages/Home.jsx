@@ -1,67 +1,76 @@
 import { useEffect, useState } from 'react'
-import HomeLastWeek from '../components/HomeLastWeek/HomeLastWeek'
-import StatsGrid from '../components/HomePlayerStats/PlayerStats'
-import TableCalification from '../components/TableCalification/TableCalification'
+import HomeLastWeek from '../components/home/HomeLastWeek'
+import StatsGrid from '../components/home/PlayerStats'
+import TableCalification from '../components/table-calification/TableCalification'
 import LayoutPage from '../layouts/LayoutPage'
-import { getBestFourPlayersRequest, getMoreAndLessBuyPlayersRequest } from '../services/player'
-import { getUsersRequest } from '../services/user'
 import useNavbar from '../hooks/useNavbar'
+import service from '../services/service'
+import Subtitle from '../components/Subtitle'
 
 function Home() {
 
-  const [isLoadingFour, setIsLoadingFour] = useState(false)
   const [isLoadingBest, setIsLoadingBest] = useState(false)
-  const [bestFourPlayers, setBestFourPlayers] = useState([])
-  const [moreAndLessBuy, setMoreAndLessBuy] = useState([])
+  const [bestPlayers, setBestPlayers] = useState([])
+  const [bestRequestMessage, setBestRequestMessage] = useState('')
+  const [isLoadingMoreBuy, setIsLoadingMoreBuy] = useState(false)
+  const [moreBuyPlayers, setMoreBuyPlayers] = useState([])
+  const [moreBuyRequestMessage, setMoreBuyRequestMessage] = useState('')
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false)
   const [users, setUsers] = useState([])
+  const [usersRequestMessage, setUsersRequestMessage] = useState('')
+
+
   const { setIcon } = useNavbar()
 
   useEffect(() => {
     setIcon('home')
-    async function getBestFourPlayers() {
-      const res = await getBestFourPlayersRequest()
-      if (res.status === 200) {
-        setBestFourPlayers([...res.data])
-        if (!res.data.length) {
-          setIsLoadingFour(true)
-        }
-      } else {
-        setIsLoadingFour(true)
+    async function getPlayersLastWeek() {
+      setIsLoadingBest(true)
+      setIsLoadingMoreBuy(true)
+      try {
+        const res = await service.getPlayersLastWeekRequest()
+        const p1 = res.data.data.slice(0, res.data.data.length)
+        const p2 = res.data.data.slice(0, res.data.data.length)
+        p1.sort((a, b) => a.points - b.points)
+        p2.sort((a, b) => a.timesBought - b.timesBought)
+        setBestPlayers()
+        setMoreBuyPlayers()
+      } catch (e) {
+        setBestRequestMessage(e.response.data.message)
+        setMoreBuyRequestMessage(e.response.data.message)
       }
-    }
-    async function getMoreAndLessBuyPlayers() {
-      const res = await getMoreAndLessBuyPlayersRequest()
-      if (res.status === 200) {
-        setMoreAndLessBuy({...res.data})
-        setIsLoadingBest(true)
-      }
+      setIsLoadingBest(false)
+      setIsLoadingMoreBuy(false)
     }
     async function getUsers() {
-      const res = await getUsersRequest()
-      if (res.status === 200) {
-        setUsers([...res.data])
+      setIsLoadingUsers(true)
+      try {
+        const res = await service.getUsersRequest()
+        setUsers(res.data.data)
+      } catch (e) {
+        setUsersRequestMessage(e.response.data.message)
       }
+      setIsLoadingUsers(false)
     }
     getUsers()
-    getBestFourPlayers()
-    getMoreAndLessBuyPlayers()
+    getPlayersLastWeek()
   }, [])
 
   return (
     <LayoutPage>
-      <div className='flex flex-col justify-between items-center gap-8'>
+      <div className='flex flex-col justify-between items-center gap-8 px-12'>
         <div className='w-full flex flex-col gap-12'>
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent mb-4">Tabla de Calificacion</h2>
-            <TableCalification users={users}/>
+          <div className='flex flex-col gap-4'>
+            <Subtitle>Tabla de Calificacion</Subtitle>
+            <TableCalification users={users} isLoading={isLoadingUsers} message={usersRequestMessage}/>
           </div>
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent mb-4">Mejores puntajes de la anterior semana</h2>
-            <StatsGrid players={bestFourPlayers} isLoading={isLoadingFour}/>
+          <div className='flex flex-col gap-4'>
+            <Subtitle>Mejores puntajes de la anterior semana</Subtitle>
+            <StatsGrid players={bestPlayers} isLoading={isLoadingBest} message={bestRequestMessage}/>
           </div>
-          <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-focus bg-clip-text text-transparent mb-4">Fichajes ultima semana</h2>
-            <HomeLastWeek isLoading={isLoadingBest} more={moreAndLessBuy[0]} less={moreAndLessBuy[1]} />
+          <div className='flex flex-col gap-4'>
+            <Subtitle>Fichajes ultima semana</Subtitle>
+            <HomeLastWeek players={moreBuyPlayers} isLoading={isLoadingMoreBuy} message={moreBuyRequestMessage}/>
           </div>
         </div>
       </div>

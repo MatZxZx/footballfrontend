@@ -1,10 +1,3 @@
-.Continue {
-    color: white;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-    width: 100%;
-}
-
 .animate-football {
     animation: animate-football 2s infinite linear;
 }
@@ -23,8 +16,4 @@
     100% {
         transform: rotate(360deg);
     }
-}
-
-.itemn {
-    list-style: disc;
 }

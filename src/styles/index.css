@@ -4,6 +4,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    font-size: 24px;
+    font-family: poppins;
+    color: #f5f6fa;
+    --pt: #CC40E2;
+    --df: #58C6CD;
+    --mc: #E3E816;
+    --del: #C71919;
+    --toast-color: #C71919;
+    --scroll-color: #58C6CD;
+}
+
+@media (width < 600px) {
+    :root {
+        font-size: 16px;
+    }
+}
+
 body {
     background-color: #121212;
 }
@@ -14,7 +32,7 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
-    background-color: #58C6CD;
+    background-color: var(--scroll-color);
     border-radius: 999px;
 }
 
@@ -30,54 +48,44 @@ body::-webkit-scrollbar-thumb {
     box-shadow: 0px 5px 15px 2px #C7191966;
 }
 
-.campo-de-fulbo {
-    width: 786px;
-    height: 512px;
-    background-image: url('/src/assets/Frame\ foto.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    margin: auto;
-    background-size: 100%;
-}
-
 .selected-player-del img {
-    filter: drop-shadow(0px 0px 10px #C71919);
+    filter: drop-shadow(0px 0px 10px var(--del));
 }
 
 .selected-player-del p {
-    background-color: #C71919;
-    color: #202020!important;
+    background-color: var(--del);
+    color: #202020 !important;
 }
 
 .selected-player-mc img {
-    filter: drop-shadow(0px 0px 10px #E3E816);
+    filter: drop-shadow(0px 0px 10px var(--mc));
 }
 
 .selected-player-mc p {
-    background-color: #E3E816;
-    color: #202020!important;
+    background-color: var(--mc);
+    color: #202020 !important;
 }
 
 .selected-player-df img {
-    filter: drop-shadow(0px 0px 10px #58C6CD);
+    filter: drop-shadow(0px 0px 10px var(--df));
 }
 
 .selected-player-df p {
-    background-color: #58C6CD;
-    color: #202020!important;
+    background-color: var(--df);
+    color: #202020 !important;
 }
 
 .selected-player-pt img {
-    filter: drop-shadow(0px 0px 10px #CC40E2);
+    filter: drop-shadow(0px 0px 10px var(--pt));
 }
 
 .selected-player-pt p {
-    background-color: #CC40E2;
-    color: #202020!important;
+    background-color: var(--pt);
+    color: #202020 !important;
 }
 
 .custom-toast {
-    background-color: #C71919;
+    background-color: var(--toast-color);
 }
 
 .scroll::-webkit-scrollbar {
@@ -86,7 +94,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .scroll::-webkit-scrollbar-thumb {
-    background-color: #58C6CD;
+    background-color: var(--df);
     border-radius: 999px;
 }
 
@@ -94,12 +102,15 @@ body::-webkit-scrollbar-thumb {
     filter: brightness(0.2);
 }
 
-.team-transfer {
+.football-field {
     width: 100%;
-    background-image: url('/src/assets/Frame\ foto.png');
+    max-width: 768px;
+    height: 100%;
+    max-height: 512px;
+    background-image: url('/src/assets/soccer.png');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 100%;
+    background-size: contain;
 }
 
 .transfer__model {
@@ -110,21 +121,45 @@ body::-webkit-scrollbar-thumb {
 }
 
 .transfer__model-active {
-    transform: translate(-5%);
+    transform: translate(0%);
 }
 
 .player-img-del {
-    filter: drop-shadow(0px 0px 10px #C71919);
+    filter: drop-shadow(0px 0px 10px var(--del));
 }
 
 .player-img-mc {
-    filter: drop-shadow(0px 0px 10px #E3E816);
+    filter: drop-shadow(0px 0px 10px var(--mc));
 }
 
 .player-img-df {
-    filter: drop-shadow(0px 0px 10px #58C6CD);
+    filter: drop-shadow(0px 0px 10px var(--df));
 }
 
 .player-img-pt {
-    filter: drop-shadow(0px 0px 10px #CC40E2);
+    filter: drop-shadow(0px 0px 10px var(--pt));
+}
+
+.page-loading {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .6);
+    position: fixed;
+    z-index: 1000;
+}
+
+.rank__player-card {
+    border-radius: .5rem;
+    box-shadow: rgb(194, 221, 141, .6) 0px 3px 8px;
+}
+
+.rank__player-card:hover {
+    .rank__player-img {
+        filter: grayscale(0) drop-shadow(1rem -.5rem 0rem #C2DD8D);
+    }
+}
+
+.rank__player-img {
+    filter: grayscale(1);
+    transition: all .3s;
 }
