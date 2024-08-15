@@ -26,7 +26,7 @@ function ProfileCard({ user, weeks, isLoading, message }) {
       <div className='w-1/2 flex flex-col justify-center text-center gap-4'>
         <div className='flex flex-col justify-center items-center'>
           <div className='mb-2'>
-            <img className='w-32' src='/src/assets/profile.png' alt={user.username} />
+            <img className='w-32' src='/img/profile.png' alt={user.username} />
           </div>
           <div>
             <p className='text-2xl font-bold'>{user.username}</p>

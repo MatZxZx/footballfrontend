@@ -10,7 +10,7 @@ function LandingSectionHero() {
         </div>
         <div className='flex justify-center items-center gap-12'>
           <div>
-            <img className='w-16' src='/src/assets/ronaldo.png' alt='ronaldo' />
+            <img className='w-16' src='/img/ronaldo.png' alt='ronaldo' />
           </div>
           <div className='flex flex-col text-white'>
             <div className='flex gap-2'>
@@ -25,7 +25,7 @@ function LandingSectionHero() {
             </div>
           </div>
           <div>
-            <img className='w-16' src='/src/assets/boca.png' alt='boca' />
+            <img className='w-16' src='/img/boca.png' alt='boca' />
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@ function LandingSectionHero() {
         </div>
         <div className='w-full flex justify-center items-center gap-6'>
           <div>
-            <img className='w-16' src='/src/assets/tsubasa.png' alt='tsubasa' />
+            <img className='w-16' src='/img/tsubasa.png' alt='tsubasa' />
           </div>
           <div className='flex flex-col gap-2'>
             <p>120 Goles</p>

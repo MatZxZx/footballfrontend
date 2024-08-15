@@ -106,7 +106,7 @@ function PlayerCard({ player, onBanking }) {
   }
 
   return <div className={classNameContainer} onClick={onBanking ? handleClickOnBanking : handleClickOnField}>
-    <img className='w-8' src="/src/assets/shirt.png" alt={player.name} />
+    <img className='w-8' src="/img/shirt.png" alt={player.name} />
     <div className='bottom-0 text-xs'>
       <p style={{ color: getPositionColor(player.position) }} className={classNameP}>{toCapitalaze(player.name)}</p>
       <span className={classNamePPoints}>{getPlayerPoints(player)} PTS</span>

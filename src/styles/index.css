@@ -107,7 +107,7 @@ body::-webkit-scrollbar-thumb {
     max-width: 768px;
     height: 100%;
     max-height: 512px;
-    background-image: url('/src/assets/soccer.png');
+    background-image: url('/img/soccer.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
