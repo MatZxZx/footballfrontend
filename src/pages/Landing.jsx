@@ -10,7 +10,7 @@ function Landing() {
         <LandingSectionHeader />
         <LandingSectionPlayerWeek />
         <LandingSectionHero />
-        <div className='mb-6'>
+        <div className='border-t border-secondary py-4'>
           <p className='text-xs text-[#247955aa] text-center '>Sitio desarrollado por Stramount</p>
         </div>
       </div>

@@ -45,7 +45,7 @@ function LandingSectionPlayerWeek() {
   return (
     <div className='w-full text-primary text-xs'>
       <Subtitle variant='italic'>Mejores de la semana</Subtitle>
-      <div className={`flex flex-col lg:flex-row mt-4`}>
+      <div className={`flex flex-col lg:flex-row mt-4 gap-8`}>
         <div className='w-full'>
           {
             isLoading

@@ -29,7 +29,7 @@ function TableCalification({ users }) {
     )
   }
   return (
-    <div className='min-h-max max-h-60 flow-shadow-primary rounded-md bg-card hidden-conten-tabla px-4 py-2'>
+    <div className='min-h-max max-h-60 flow-shadow-primary rounded-md bg-card hidden-conten-tabla px-4 py-2 flex flex-col '>
       {
         showUsers.map((user, i) => <PlayerListed key={i} user={user} />)
       }

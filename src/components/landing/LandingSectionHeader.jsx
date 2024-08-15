@@ -9,7 +9,7 @@ function LandingSectionHeader() {
         <Title>FOOTBALLFATE</Title>
         <p className={`text-xs font-light italic`}>Crea tu Equipo, Analiza, Compite y Gana</p>
       </div>
-      <div className={`lg:w-full`}>
+      <div className={`px-4 lg:w-full lg:px-0`}>
         <FormLogin />
       </div>
     </div>

@@ -133,9 +133,8 @@ function Transfer() {
           : <></>
       }
       <div onClick={handleClickOnBody}>
-
         <LayoutPage>
-          <div className='flex flex-col lg:flex-row gap-12 overflow-hidden'>
+          <div className='flex flex-col lg:flex-row gap-12 lg:overflow-hidden'>
             <div className='flex justify-center gap-4 lg:flex-col lg:justify-normal'>
               <InformationCard text='Presupuesto' data={`${userState.budget}$`} />
               <InformationCard text='Transferencias' data={userState.willCardActive ? '∞' : userState.transfers} />
@@ -150,7 +149,7 @@ function Transfer() {
                   : <></>
               }
               <div className='w-full relative flex justify-center items-center'>
-                <div className='football-field  flex flex-col justify-center items-center lg:gap-8'>
+                <div className='football-field flex flex-col justify-center items-center lg:gap-8'>
                   {
                     playersAdapter(userState.team.players.filter(p => !p.isBanking), userState.team.players.filter(p => p.isBanking)).map((section, i) => {
                       return <div key={i} className='flex gap-4'>

@@ -58,7 +58,7 @@ function Home() {
 
   return (
     <LayoutPage>
-      <div className='flex flex-col justify-between items-center gap-8 px-12'>
+      <div className='flex flex-col justify-between items-center gap-8 px-2 lg:px-12'>
         <div className='w-full flex flex-col gap-12'>
           <div className='flex flex-col gap-4'>
             <Subtitle>Tabla de Calificacion</Subtitle>
