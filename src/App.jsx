@@ -25,33 +25,31 @@ function App() {
     <>
       <ToastContainer closeButton={false} />
       <Routes>
-        <Route element={<ProtectedWeek />}>
-          <Route element={<ProtecteAuthRoutes />}>
-            <Route path='/' element={<Landing />} />
-            <Route path='/register' element={<Register />} />
-          </Route>
-          <Route element={<ProtectedRoute />} >
-            <Route path='/welcome' element={<Welcome />} />
-            <Route element={<ProtectedRoutesTeam />}>
-              <Route path='/player/:id' element={<PlayerDetails />} />
-              <Route path='/user/:id' element={<UserDetails />} />
-              <Route path='/home' element={<Home />} />
-              <Route path='/profile' element={<Profile />} />
-              <Route path='/team' element={
-                <TeamContextProvider>
-                  <Team />
-                </TeamContextProvider>
-              } />
-              <Route path='/rank' element={<Rank />} />
-            </Route>
-            <Route path='/transfer' element={
-              <TransferContextProvider>
-                <Transfer />
-              </TransferContextProvider>}
-            />
-          </Route>
-          <Route path='/*' element={<NotFound />} />
+        <Route element={<ProtecteAuthRoutes />}>
+          <Route path='/' element={<Landing />} />
+          <Route path='/register' element={<Register />} />
         </Route>
+        <Route element={<ProtectedRoute />} >
+          <Route path='/welcome' element={<Welcome />} />
+          <Route element={<ProtectedRoutesTeam />}>
+            <Route path='/player/:id' element={<PlayerDetails />} />
+            <Route path='/user/:id' element={<UserDetails />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/team' element={
+              <TeamContextProvider>
+                <Team />
+              </TeamContextProvider>
+            } />
+            <Route path='/rank' element={<Rank />} />
+          </Route>
+          <Route path='/transfer' element={
+            <TransferContextProvider>
+              <Transfer />
+            </TransferContextProvider>}
+          />
+        </Route>
+        <Route path='/*' element={<NotFound />} />
         <Route path='/week' element={<Week />} />
       </Routes>
     </>
